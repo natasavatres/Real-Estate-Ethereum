@@ -16,7 +16,7 @@ public class DatabaseResources {
 
     public DatabaseResources() throws Exception {
         properties = new Properties();
-        FileInputStream fis = new FileInputStream("C:\\Users\\Natasa Vatres\\Documents\\NetBeansProjects\\RealEstateETH\\db.config");
+        FileInputStream fis = new FileInputStream("db.config");
         properties.load(fis);
     }
     

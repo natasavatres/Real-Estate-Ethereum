@@ -6,6 +6,7 @@
 package com.verisec.realestateeth.forms;
 
 import com.verisec.realestateeth.domain.Contracts;
+import static com.verisec.realestateeth.forms.FAdmin.logger;
 
 /**
  *
@@ -62,7 +63,7 @@ public class FAdmin extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLblMessage;
     // End of variables declaration//GEN-END:variables
-
+final static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(FAdmin.class);
     private void startBuyingSellingContract() {
         try {
             Contracts adminContracts = new Contracts();
@@ -70,6 +71,7 @@ public class FAdmin extends javax.swing.JFrame {
             
             jLblMessage.setText("Application successfully started!");
         } catch (Exception e) {
+            logger.error("Error in Real Estate Contract deploy!",e);     
             jLblMessage.setText("Error in Real Estate Contract deploy!");
         }
 
