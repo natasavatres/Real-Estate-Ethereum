@@ -92,12 +92,15 @@ public class Contracts {
     }
 
     public void createAdminContract() throws Exception {
-        HttpService httpService = new HttpService("http://localhost:8547");
+        HttpService httpService = new HttpService("http://localhost:8545");
         Web3j web3 = Web3j.build(httpService);
+//        String estimatedGas = web3.eth
 
 //      String adminPK = databaseRepository.getAdminPrivateKey();
-        Credentials credentials = Credentials.create("bc5b578e0dcb2dbf98dd6e5fe62cb5a28b84a55e15fc112d4ca88e1f62bd");
+        Credentials credentials = Credentials.create("df504d175ae63abf209bad9dda965310d99559620550e74521a6798a41215f46");
         contract = BuyingSelling.deploy(web3, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386)).send();
+        
+        //radi sa laznim privatnim kljucem
 
     }
 
