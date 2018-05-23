@@ -43,6 +43,24 @@ public class DatabaseRepository {
         }
         throw new Exception("There is no user with these credentials!");
     }
+
+    public String getAdminPrivateKey() throws Exception{
+        connection = DatabaseConnection.getInstance().getConnection();
+        String query = "SELECT private_key FROM user WHERE username=?";
+        PreparedStatement ps = connection.prepareStatement(query);
+        ps.setString(1, "admin");
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            String admin_pk = rs.getString("private_key");
+
+            rs.close();
+            ps.close();
+
+            return admin_pk;
+        }
+        throw new Exception("There is no user with these credentials!");
+    }
+
     
     
 }

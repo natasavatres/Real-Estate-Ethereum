@@ -7,7 +7,9 @@ package com.verisec.realestateeth.controller;
 
 import com.verisec.realestateeth.domain.User;
 import com.verisec.realestateeth.db.DatabaseRepository;
+import com.verisec.realestateeth.domain.Contracts;
 import com.verisec.realestateeth.domain.RealEstate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,7 +19,12 @@ import java.util.List;
 public class Controller {
 
     public static List<RealEstate> getAllRealEstates() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<RealEstate> realEstates = new ArrayList<>();
+        
+        Contracts buyerContract = new Contracts();
+//        buyerContract.createBuyerContract(buyerAddress);
+        
+        return realEstates;
     }
     
     public User findUser(String un, String pass) throws Exception {

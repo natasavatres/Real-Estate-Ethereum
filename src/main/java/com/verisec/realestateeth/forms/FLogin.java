@@ -7,8 +7,6 @@ package com.verisec.realestateeth.forms;
 
 import com.verisec.realestateeth.domain.User;
 import com.verisec.realestateeth.controller.Controller;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -107,20 +105,26 @@ public class FLogin extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "There is no user with these credentials!");
                 dispose();
             } else {
-                JOptionPane.showMessageDialog(this, "Welcome " + user.getFirstName() +"!");
+                JOptionPane.showMessageDialog(this, "Welcome " + user.getFirstName() + "!");
                 dispose();
+
+                if (user.getRole().equals("admin")) {
+                    JFrame fAdmin = new FAdmin();
+                    fAdmin.setVisible(true);
+                }
+                //ne radi ako ne udje admin prvi
+
+                if (user.getRole().equals("buyer")) {
+                    JFrame fBuyer = new FBuyer();
+                    fBuyer.setVisible(true);
+                }
+
+                if (user.getRole().equals("seller")) {
+                    JFrame fSeller = new FSeller();
+                    fSeller.setVisible(true);
+                }
             }
-            
-            if(user.getRole().equals("buyer")){
-                JFrame fBuyer = new FBuyer();
-                fBuyer.setVisible(true);
-            }
-            
-            if(user.getRole().equals("seller")){
-                JFrame fSeller = new FSeller();
-                fSeller.setVisible(true);
-            }
-            
+
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "There is no user with these credentials!");
         }
