@@ -5,6 +5,7 @@
  */
 package com.verisec.realestateeth.domain;
 
+import com.verisec.realestateeth.controller.Controller;
 import com.verisec.realestateeth.db.DatabaseRepository;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -31,10 +32,12 @@ public class Contracts {
     DatabaseRepository databaseRepository;
     List<String> contracts;
     BuyingSelling contract;
+    Controller controller;
 
     public Contracts() {
         databaseRepository = new DatabaseRepository();
         contracts = new ArrayList<>();
+        controller = new Controller();
     }
 
     public void createBuyerContract(String buyerAddress) {
@@ -92,16 +95,16 @@ public class Contracts {
     }
 
     public void createAdminContract() throws Exception {
-        HttpService httpService = new HttpService("http://localhost:8545");
+        HttpService httpService = new HttpService("http://localhost:8546");
         Web3j web3 = Web3j.build(httpService);
-//        String estimatedGas = web3.eth
 
-//      String adminPK = databaseRepository.getAdminPrivateKey();
-        Credentials credentials = Credentials.create("df504d175ae63abf209bad9dda965310d99559620550e74521a6798a41215f46");
+        String adminPK = databaseRepository.getAdminPrivateKey();
+        System.out.println(adminPK);
+
+        Credentials credentials = Credentials.create(adminPK);
         contract = BuyingSelling.deploy(web3, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386)).send();
-        
-        //radi sa laznim privatnim kljucem
 
+        controller.addAdminContract(contract);
     }
 
 }

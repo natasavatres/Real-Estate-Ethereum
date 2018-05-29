@@ -7,6 +7,7 @@ package com.verisec.realestateeth.controller;
 
 import com.verisec.realestateeth.domain.User;
 import com.verisec.realestateeth.db.DatabaseRepository;
+import com.verisec.realestateeth.domain.BuyingSelling;
 import com.verisec.realestateeth.domain.Contracts;
 import com.verisec.realestateeth.domain.RealEstate;
 import java.util.ArrayList;
@@ -31,5 +32,12 @@ public class Controller {
         DatabaseRepository dbr = new DatabaseRepository();
         return dbr.findUser(un, pass);
     }
+
+    public void addAdminContract(BuyingSelling contract) {
+        DatabaseRepository dbr = new DatabaseRepository();
+        dbr.addAdminContract(contract);
+    }
+    
+    
     
 }
