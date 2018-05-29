@@ -9,6 +9,7 @@ import com.verisec.realestateeth.domain.User;
 import com.verisec.realestateeth.db.DatabaseRepository;
 import com.verisec.realestateeth.domain.BuyingSelling;
 import com.verisec.realestateeth.domain.Contracts;
+import com.verisec.realestateeth.domain.Offer;
 import com.verisec.realestateeth.domain.RealEstate;
 import com.verisec.realestateeth.domain.TransferingFunds;
 import java.math.BigInteger;
@@ -31,6 +32,11 @@ public class Controller {
         return contract.getAllRealEstates(buyer);
     }
 
+    public List<RealEstate> getAllRealEstatesFromSeller(User seller) throws Exception {
+        Contracts contract = new Contracts();
+        return contract.getAllRealEstatesFromSeller(seller);
+    }
+
     public User findUser(String un, String pass) throws Exception {
         DatabaseRepository dbr = new DatabaseRepository();
         return dbr.findUser(un, pass);
@@ -49,6 +55,11 @@ public class Controller {
     public void createBuyerContract(User currentUser, RealEstate currentRealEstate, BigInteger offer) {
         Contracts contract = new Contracts();
         contract.createBuyerContract(currentUser, currentRealEstate, offer);
+    }
+
+    public List<Offer> getOffers(User seller) throws Exception {
+        Contracts contract = new Contracts();
+        return contract.getOffers(seller);
     }
 
 }

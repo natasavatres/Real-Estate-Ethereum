@@ -5,6 +5,14 @@
  */
 package com.verisec.realestateeth.forms;
 
+import com.verisec.realestateeth.controller.Controller;
+import com.verisec.realestateeth.domain.RealEstate;
+import com.verisec.realestateeth.domain.User;
+import com.verisec.realestateeth.table.model.RealEstateTableModel;
+import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.table.TableModel;
+
 /**
  *
  * @author Natasa Vatres
@@ -16,7 +24,15 @@ public class FSeller extends javax.swing.JFrame {
      */
     public FSeller() {
         initComponents();
+    }
+
+    User currentUser;
+
+    public FSeller(User user) {
+        initComponents();
         centerForm();
+        currentUser = user;
+        populateTableRealEstatesSeller(user);
     }
 
     /**
@@ -28,27 +44,92 @@ public class FSeller extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTblRealEstatesSeller = new javax.swing.JTable();
+        jBttnRecOffers = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sell real estate");
+
+        jLabel1.setText("Your real estates: ");
+
+        jTblRealEstatesSeller.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane1.setViewportView(jTblRealEstatesSeller);
+
+        jBttnRecOffers.setText("Check received offers");
+        jBttnRecOffers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBttnRecOffersActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jBttnRecOffers, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(0, 215, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jBttnRecOffers)
+                .addGap(19, 19, 19))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jBttnRecOffersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnRecOffersActionPerformed
+        // TODO add your handling code here:
+        JFrame fAcceptOffer = new FAcceptOffer(currentUser);
+        fAcceptOffer.setVisible(true);
+    }//GEN-LAST:event_jBttnRecOffersActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jBttnRecOffers;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTblRealEstatesSeller;
     // End of variables declaration//GEN-END:variables
     private void centerForm() {
         setLocationRelativeTo(null);
+    }
+    
+     Controller controller = new Controller();
+
+    private void populateTableRealEstatesSeller(User seller) {
+        try {
+            List<RealEstate> realEstates = controller.getAllRealEstatesFromSeller(seller);
+            TableModel tm = new RealEstateTableModel(realEstates);
+            jTblRealEstatesSeller.setModel(tm);
+        } catch (Exception ex) {
+            System.out.println("Error in populating table with real estates from seller");
+        }
     }
 }

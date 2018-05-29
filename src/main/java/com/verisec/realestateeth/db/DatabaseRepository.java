@@ -6,6 +6,7 @@
 package com.verisec.realestateeth.db;
 
 import com.verisec.realestateeth.domain.BuyingSelling;
+import com.verisec.realestateeth.domain.ContractEntity;
 import com.verisec.realestateeth.domain.RealEstate;
 import com.verisec.realestateeth.domain.TransferingFunds;
 import com.verisec.realestateeth.domain.User;
@@ -15,6 +16,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -143,6 +146,38 @@ public class DatabaseRepository {
         } catch (Exception e) {
             System.out.println("Error in saving contract to database");
         }
+    }
+
+    public List<ContractEntity> getOffersBuyerSeller(User seller) {
+
+        List<ContractEntity> contractEntityList = new ArrayList<>();
+
+        try {
+            connection = DatabaseConnection.getInstance().getConnection();
+            String query = "SELECT * FROM contract WHERE address_seller = ?";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, seller.getAddress());
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String addressContract = rs.getString("address_contract");
+                String addressBuyer = rs.getString("address_buyer");
+                String addressSeller = rs.getString("address_seller");
+                int idRE = rs.getInt("id_real_estate");
+
+                java.sql.Date dateSql = rs.getDate("date");
+                java.util.Date dateUtil = new java.util.Date(dateSql.getTime());
+
+                contractEntityList.add(new ContractEntity(addressContract, addressBuyer, addressSeller, idRE, dateUtil));
+
+                rs.close();
+                ps.close();
+
+            }
+        } catch (Exception ex) {
+            System.out.println("Error in getting offer buyer-seller");
+        }
+        return contractEntityList;
     }
 
 }

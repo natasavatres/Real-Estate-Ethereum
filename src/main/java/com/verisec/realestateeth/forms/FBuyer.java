@@ -136,7 +136,7 @@ public class FBuyer extends javax.swing.JFrame {
             int distance = (int) jTblRealEstates.getValueAt(selectedRow, 3);
             int price = (int) jTblRealEstates.getValueAt(selectedRow, 4);
             
-            RealEstate realEstate = new RealEstate(selectedRow, ownerAddress, reAddress, area, distance, price);
+            RealEstate realEstate = new RealEstate(selectedRow+1, ownerAddress, reAddress, area, distance, price);
             
             JFrame fSetOffer = new FSetOffer(currentUser, realEstate);
             fSetOffer.setVisible(true);

@@ -120,7 +120,7 @@ public class FLogin extends javax.swing.JFrame {
                 }
 
                 if (user.getRole().equals("seller")) {
-                    JFrame fSeller = new FSeller();
+                    JFrame fSeller = new FSeller(user);
                     fSeller.setVisible(true);
                 }
             }
