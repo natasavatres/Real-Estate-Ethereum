@@ -115,7 +115,7 @@ public class FLogin extends javax.swing.JFrame {
                 //ne radi ako ne udje admin prvi
 
                 if (user.getRole().equals("buyer")) {
-                    JFrame fBuyer = new FBuyer();
+                    JFrame fBuyer = new FBuyer(user);
                     fBuyer.setVisible(true);
                 }
 

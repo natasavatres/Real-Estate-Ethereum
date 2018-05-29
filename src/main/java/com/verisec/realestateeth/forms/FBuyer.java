@@ -7,6 +7,7 @@ package com.verisec.realestateeth.forms;
 
 import com.verisec.realestateeth.controller.Controller;
 import com.verisec.realestateeth.domain.RealEstate;
+import com.verisec.realestateeth.domain.User;
 import com.verisec.realestateeth.table.model.RealEstateTableModel;
 import java.util.List;
 import javax.swing.table.TableModel;
@@ -22,8 +23,13 @@ public class FBuyer extends javax.swing.JFrame {
      */
     public FBuyer() {
         initComponents();
+    }
+    
+
+    public FBuyer(User user) {
+        initComponents();
         centerForm();
-        populateTableRealEstates();
+        populateTableRealEstates(user);
     }
 
     /**
@@ -69,7 +75,7 @@ public class FBuyer extends javax.swing.JFrame {
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jBttnBuy, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -94,8 +100,8 @@ public class FBuyer extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 444, Short.MAX_VALUE)
-                        .addComponent(jBttnCheck, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jBttnCheck, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -124,19 +130,21 @@ public class FBuyer extends javax.swing.JFrame {
     private javax.swing.JTable jTblRealEstates;
     // End of variables declaration//GEN-END:variables
 
-
     private void centerForm() {
         setLocationRelativeTo(null);
     }
 
-    private void populateTableRealEstates() {
+    Controller controller = new Controller();
+    
+    private void populateTableRealEstates(User user) {
         try {
-            List<RealEstate> realEstates = Controller.getAllRealEstates();
+            List<RealEstate> realEstates = controller.getAllRealEstates(user);
             TableModel tm = new RealEstateTableModel(realEstates);
             jTblRealEstates.setModel(tm);
         } catch (Exception ex) {
             System.out.println("Error in populating table with real estates");
         }
     }
-    
+
+
 }

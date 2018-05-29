@@ -14,6 +14,7 @@ import javax.swing.table.AbstractTableModel;
  * @author Natasa Vatres
  */
 public class RealEstateTableModel extends AbstractTableModel{
+    
     private final List<RealEstate> realEstates;
     private String [] columnNames = new String[]{"Owner","Address","Area","Distance from center","Price"};
 

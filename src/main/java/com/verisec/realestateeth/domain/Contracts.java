@@ -17,6 +17,7 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.tuples.generated.Tuple6;
 import static org.web3j.tx.Contract.GAS_LIMIT;
 import static org.web3j.tx.ManagedTransaction.GAS_PRICE;
 
@@ -83,6 +84,8 @@ public class Contracts {
 
             logger.info("Seller account balance is " + balance3);
 
+//            String privateKey = controller.getPrivateKey("admin");
+
             Credentials credentials = Credentials.create("bc5b578e0dcb2dbf98dd6e5fe62cb5a28b84a55e15fc112d4ca88e1f62bd7c35");
 
             contract = BuyingSelling.load(contract.getContractAddress(), web3, credentials, GAS_PRICE, GAS_LIMIT);
@@ -98,13 +101,47 @@ public class Contracts {
         HttpService httpService = new HttpService("http://localhost:8546");
         Web3j web3 = Web3j.build(httpService);
 
-        String adminPK = databaseRepository.getAdminPrivateKey();
-        System.out.println(adminPK);
-
+        String adminPK = controller.getPrivateKey("admin");
         Credentials credentials = Credentials.create(adminPK);
         contract = BuyingSelling.deploy(web3, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386)).send();
 
         controller.addAdminContract(contract);
+
+        contract.setRealEstate(BigInteger.valueOf(1), "0x3590aca93338b0721966a8d0c96ebf2c4c87c544", "Francuska 5", BigInteger.valueOf(40), BigInteger.valueOf(1), BigInteger.valueOf(500)).send();
+        contract.setRealEstate(BigInteger.valueOf(2), "0x3590aca93338b0721966a8d0c96ebf2c4c87c544", "Marka Celebonovica 27", BigInteger.valueOf(45), BigInteger.valueOf(10), BigInteger.valueOf(300)).send();
+    }
+
+    public List<RealEstate> getAllRealEstates(User buyer) throws Exception {
+        List<RealEstate> realEstates = new ArrayList<>();
+        
+        HttpService httpService = new HttpService("http://localhost:8545");
+        Web3j web3j = Web3j.build(httpService);
+
+        DatabaseRepository dbr = new DatabaseRepository();
+        String adminContractAddress = dbr.getContractAddress("000", "000");
+
+        String buyerPK = controller.getPrivateKey(buyer.getUsername());
+        Credentials credentials = Credentials.create(buyerPK);
+
+        contract = BuyingSelling.load(adminContractAddress, web3j, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386));
+        
+        List<BigInteger> realEstateIDs = (List<BigInteger>) contract.getAllRealEstates().send();
+
+        Tuple6<BigInteger, String, String, BigInteger, BigInteger, BigInteger> returnVal;
+
+        for (BigInteger realEstateID : realEstateIDs) {
+             returnVal = contract.getRealEstate(realEstateID).send();
+             BigInteger idRE = returnVal.getValue1();
+             String ownerAddr= returnVal.getValue2();
+             String reAddr = returnVal.getValue3();
+             BigInteger area = returnVal.getValue4();
+             BigInteger dist = returnVal.getValue5();
+             BigInteger price = returnVal.getValue6();
+             
+             realEstates.add(new RealEstate(idRE.intValue(), ownerAddr, reAddr, area.intValue(), dist.intValue(), price.intValue()));
+        } 
+
+        return realEstates;
     }
 
 }

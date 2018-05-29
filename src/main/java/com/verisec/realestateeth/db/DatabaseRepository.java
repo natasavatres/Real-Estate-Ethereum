@@ -48,19 +48,19 @@ public class DatabaseRepository {
         throw new Exception("There is no user with these credentials!");
     }
 
-    public String getAdminPrivateKey() throws Exception {
+    public String getPrivateKey(String user) throws Exception {
         connection = DatabaseConnection.getInstance().getConnection();
         String query = "SELECT private_key FROM user WHERE username=?";
         PreparedStatement ps = connection.prepareStatement(query);
-        ps.setString(1, "admin");
+        ps.setString(1, user);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
-            String admin_pk = rs.getString("private_key");
+            String privateKey = rs.getString("private_key");
 
             rs.close();
             ps.close();
 
-            return admin_pk;
+            return privateKey;
         }
         throw new Exception("There is no user with these credentials!");
     }
@@ -93,6 +93,24 @@ public class DatabaseRepository {
         } catch (Exception e) {
             System.out.println("Error in generating keys");
         }
+    }
+
+    public String getContractAddress(String addressBuyer, String addressSeller) throws Exception {
+        connection = DatabaseConnection.getInstance().getConnection();
+        String query = "SELECT address_contract FROM contract WHERE address_buyer =? AND address_seller = ?";
+        PreparedStatement ps = connection.prepareStatement(query);
+        ps.setString(1, addressBuyer);
+        ps.setString(2, addressSeller);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            String addressContract = rs.getString("address_contract");
+
+            rs.close();
+            ps.close();
+
+            return addressContract;
+        }
+        throw new Exception("There is no contract between these users!");
     }
 
 }

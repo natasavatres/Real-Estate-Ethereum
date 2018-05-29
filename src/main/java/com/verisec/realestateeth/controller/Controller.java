@@ -10,8 +10,14 @@ import com.verisec.realestateeth.db.DatabaseRepository;
 import com.verisec.realestateeth.domain.BuyingSelling;
 import com.verisec.realestateeth.domain.Contracts;
 import com.verisec.realestateeth.domain.RealEstate;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import org.web3j.crypto.Credentials;
+import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.RemoteCall;
+import org.web3j.protocol.http.HttpService;
+import org.web3j.tuples.generated.Tuple6;
 
 /**
  *
@@ -19,25 +25,24 @@ import java.util.List;
  */
 public class Controller {
 
-    public static List<RealEstate> getAllRealEstates() {
-        List<RealEstate> realEstates = new ArrayList<>();
-        
-        Contracts buyerContract = new Contracts();
-//        buyerContract.createBuyerContract(buyerAddress);
-        
-        return realEstates;
+    public List<RealEstate> getAllRealEstates(User buyer) throws Exception {
+        Contracts contract = new Contracts();
+        return contract.getAllRealEstates(buyer);
     }
-    
+
     public User findUser(String un, String pass) throws Exception {
         DatabaseRepository dbr = new DatabaseRepository();
         return dbr.findUser(un, pass);
+    }
+
+    public String getPrivateKey(String username) throws Exception {
+        DatabaseRepository dbr = new DatabaseRepository();
+        return dbr.getPrivateKey(username);
     }
 
     public void addAdminContract(BuyingSelling contract) {
         DatabaseRepository dbr = new DatabaseRepository();
         dbr.addAdminContract(contract);
     }
-    
-    
-    
+
 }
