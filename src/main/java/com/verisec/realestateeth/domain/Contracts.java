@@ -31,43 +31,35 @@ public class Contracts {
     int cost = 100;
 
     DatabaseRepository databaseRepository;
-    List<String> contracts;
-    BuyingSelling contract;
     Controller controller;
+    BuyingSelling contractBS;
+    TransferingFunds contractTF;
 
     public Contracts() {
         databaseRepository = new DatabaseRepository();
-        contracts = new ArrayList<>();
         controller = new Controller();
     }
 
-    public void createBuyerContract(String buyerAddress) {
+    public void createBuyerContract(User buyer, RealEstate realEstate, BigInteger offer) {
         try {
             HttpService httpService = new HttpService("http://localhost:8545");
             Web3j web3 = Web3j.build(httpService);
 
-            EthGetBalance ethGetBalance3 = web3.ethGetBalance(buyerAddress, DefaultBlockParameterName.LATEST).sendAsync().get();
+            EthGetBalance ethGetBalance3 = web3.ethGetBalance(buyer.getAddress(), DefaultBlockParameterName.LATEST).sendAsync().get();
             BigInteger balance3 = ethGetBalance3.getBalance();
-
             logger.info("Buyer account balance is " + balance3);
 
-            Credentials credentials = Credentials.create("df504d175ae63abf209bad9dda965310d99559620550e74521a6798a41215f46");
+            String buyerPK = buyer.getPrivateKey();
+            Credentials credentials = Credentials.create(buyerPK);
 
-            if (contracts.isEmpty()) {
-                contract = BuyingSelling.deploy(web3, credentials, GAS_PRICE, GAS_LIMIT).send();
+            String adminContractAddress = databaseRepository.getContractAddress("000", "000");
 
-//                BigInteger costBig = BigInteger.valueOf(cost);
-//                contract.setSeller(sellerAddress);
-//                contract.setOffer(costBig).send();
-//
-//                contracts.add(contract.getContractAddress());
-                //DODAJ UGOVOR U BAZU
-            } else {
-                contract = BuyingSelling.load(contract.getContractAddress(), web3, credentials, GAS_PRICE, GAS_LIMIT);
-
-//                contract.setNameCost();           
-//                logger.info(contract.getRealEstateOwner());
-            }
+            contractTF = TransferingFunds.deploy(web3, credentials, GAS_PRICE, GAS_LIMIT, adminContractAddress).send();
+            
+            databaseRepository.addContract(buyer, realEstate, contractTF);
+            
+            contractTF.setSeller(realEstate.getOwnerAddress());
+            contractTF.setOffer(offer);
 
         } catch (Exception ex) {
             Logger.getLogger(Contracts.class.getName()).log(Level.SEVERE, null, ex);
@@ -85,10 +77,9 @@ public class Contracts {
             logger.info("Seller account balance is " + balance3);
 
 //            String privateKey = controller.getPrivateKey("admin");
-
             Credentials credentials = Credentials.create("bc5b578e0dcb2dbf98dd6e5fe62cb5a28b84a55e15fc112d4ca88e1f62bd7c35");
 
-            contract = BuyingSelling.load(contract.getContractAddress(), web3, credentials, GAS_PRICE, GAS_LIMIT);
+            contractBS = BuyingSelling.load(contractBS.getContractAddress(), web3, credentials, GAS_PRICE, GAS_LIMIT);
 
 //            logger.info("Buyer's offer: " + contract.getOffer());
 //            contract.agree();
@@ -103,17 +94,17 @@ public class Contracts {
 
         String adminPK = controller.getPrivateKey("admin");
         Credentials credentials = Credentials.create(adminPK);
-        contract = BuyingSelling.deploy(web3, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386)).send();
+        contractBS = BuyingSelling.deploy(web3, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386)).send();
 
-        controller.addAdminContract(contract);
+        controller.addAdminContract(contractBS);
 
-        contract.setRealEstate(BigInteger.valueOf(1), "0x3590aca93338b0721966a8d0c96ebf2c4c87c544", "Francuska 5", BigInteger.valueOf(40), BigInteger.valueOf(1), BigInteger.valueOf(500)).send();
-        contract.setRealEstate(BigInteger.valueOf(2), "0x3590aca93338b0721966a8d0c96ebf2c4c87c544", "Marka Celebonovica 27", BigInteger.valueOf(45), BigInteger.valueOf(10), BigInteger.valueOf(300)).send();
+        contractBS.setRealEstate(BigInteger.valueOf(1), "0x3590aca93338b0721966a8d0c96ebf2c4c87c544", "Francuska 5", BigInteger.valueOf(40), BigInteger.valueOf(1), BigInteger.valueOf(500)).send();
+        contractBS.setRealEstate(BigInteger.valueOf(2), "0x3590aca93338b0721966a8d0c96ebf2c4c87c544", "Marka Celebonovica 27", BigInteger.valueOf(45), BigInteger.valueOf(10), BigInteger.valueOf(300)).send();
     }
 
     public List<RealEstate> getAllRealEstates(User buyer) throws Exception {
         List<RealEstate> realEstates = new ArrayList<>();
-        
+
         HttpService httpService = new HttpService("http://localhost:8545");
         Web3j web3j = Web3j.build(httpService);
 
@@ -123,23 +114,23 @@ public class Contracts {
         String buyerPK = controller.getPrivateKey(buyer.getUsername());
         Credentials credentials = Credentials.create(buyerPK);
 
-        contract = BuyingSelling.load(adminContractAddress, web3j, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386));
-        
-        List<BigInteger> realEstateIDs = (List<BigInteger>) contract.getAllRealEstates().send();
+        contractBS = BuyingSelling.load(adminContractAddress, web3j, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386));
+
+        List<BigInteger> realEstateIDs = (List<BigInteger>) contractBS.getAllRealEstates().send();
 
         Tuple6<BigInteger, String, String, BigInteger, BigInteger, BigInteger> returnVal;
 
         for (BigInteger realEstateID : realEstateIDs) {
-             returnVal = contract.getRealEstate(realEstateID).send();
-             BigInteger idRE = returnVal.getValue1();
-             String ownerAddr= returnVal.getValue2();
-             String reAddr = returnVal.getValue3();
-             BigInteger area = returnVal.getValue4();
-             BigInteger dist = returnVal.getValue5();
-             BigInteger price = returnVal.getValue6();
-             
-             realEstates.add(new RealEstate(idRE.intValue(), ownerAddr, reAddr, area.intValue(), dist.intValue(), price.intValue()));
-        } 
+            returnVal = contractBS.getRealEstate(realEstateID).send();
+            BigInteger idRE = returnVal.getValue1();
+            String ownerAddr = returnVal.getValue2();
+            String reAddr = returnVal.getValue3();
+            BigInteger area = returnVal.getValue4();
+            BigInteger dist = returnVal.getValue5();
+            BigInteger price = returnVal.getValue6();
+
+            realEstates.add(new RealEstate(idRE.intValue(), ownerAddr, reAddr, area.intValue(), dist.intValue(), price.intValue()));
+        }
 
         return realEstates;
     }

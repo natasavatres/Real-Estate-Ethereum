@@ -10,6 +10,7 @@ import com.verisec.realestateeth.db.DatabaseRepository;
 import com.verisec.realestateeth.domain.BuyingSelling;
 import com.verisec.realestateeth.domain.Contracts;
 import com.verisec.realestateeth.domain.RealEstate;
+import com.verisec.realestateeth.domain.TransferingFunds;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,11 @@ public class Controller {
     public void addAdminContract(BuyingSelling contract) {
         DatabaseRepository dbr = new DatabaseRepository();
         dbr.addAdminContract(contract);
+    }
+
+    public void createBuyerContract(User currentUser, RealEstate currentRealEstate, BigInteger offer) {
+        Contracts contract = new Contracts();
+        contract.createBuyerContract(currentUser, currentRealEstate, offer);
     }
 
 }

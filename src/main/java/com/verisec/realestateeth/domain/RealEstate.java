@@ -76,6 +76,11 @@ public class RealEstate {
     public void setCenterDistance(int centerDistance) {
         this.centerDistance = centerDistance;
     }
+
+    @Override
+    public String toString() {
+        return "\n Owner address: " + ownerAddress + "\n Location: " + realEstateAddress + "\n Area: " + area + "\n Distance form center:  " + centerDistance + "\n Price: " + price;
+    }
     
     
 }

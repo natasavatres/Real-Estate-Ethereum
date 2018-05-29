@@ -10,6 +10,8 @@ import com.verisec.realestateeth.domain.RealEstate;
 import com.verisec.realestateeth.domain.User;
 import com.verisec.realestateeth.table.model.RealEstateTableModel;
 import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
 
 /**
@@ -24,11 +26,13 @@ public class FBuyer extends javax.swing.JFrame {
     public FBuyer() {
         initComponents();
     }
-    
 
+    User currentUser;
+    
     public FBuyer(User user) {
         initComponents();
         centerForm();
+        currentUser = user;
         populateTableRealEstates(user);
     }
 
@@ -64,6 +68,11 @@ public class FBuyer extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jTblRealEstates);
 
         jBttnBuy.setText("Buy");
+        jBttnBuy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBttnBuyActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -117,6 +126,26 @@ public class FBuyer extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jBttnBuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnBuyActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = jTblRealEstates.getSelectedRow();
+        if (selectedRow >= 0) {        
+            String ownerAddress = (String) jTblRealEstates.getValueAt(selectedRow, 0);
+            String reAddress = (String) jTblRealEstates.getValueAt(selectedRow, 1);
+            int area = (int) jTblRealEstates.getValueAt(selectedRow, 2);
+            int distance = (int) jTblRealEstates.getValueAt(selectedRow, 3);
+            int price = (int) jTblRealEstates.getValueAt(selectedRow, 4);
+            
+            RealEstate realEstate = new RealEstate(selectedRow, ownerAddress, reAddress, area, distance, price);
+            
+            JFrame fSetOffer = new FSetOffer(currentUser, realEstate);
+            fSetOffer.setVisible(true);
+    
+        } else {
+            JOptionPane.showMessageDialog(null, "Please select real estate!");
+        }
+    }//GEN-LAST:event_jBttnBuyActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -135,7 +164,7 @@ public class FBuyer extends javax.swing.JFrame {
     }
 
     Controller controller = new Controller();
-    
+
     private void populateTableRealEstates(User user) {
         try {
             List<RealEstate> realEstates = controller.getAllRealEstates(user);
@@ -145,6 +174,5 @@ public class FBuyer extends javax.swing.JFrame {
             System.out.println("Error in populating table with real estates");
         }
     }
-
 
 }

@@ -6,6 +6,8 @@
 package com.verisec.realestateeth.db;
 
 import com.verisec.realestateeth.domain.BuyingSelling;
+import com.verisec.realestateeth.domain.RealEstate;
+import com.verisec.realestateeth.domain.TransferingFunds;
 import com.verisec.realestateeth.domain.User;
 import java.sql.Connection;
 import java.sql.Date;
@@ -111,6 +113,36 @@ public class DatabaseRepository {
             return addressContract;
         }
         throw new Exception("There is no contract between these users!");
+    }
+
+    public void addContract(User buyer, RealEstate realEstate, TransferingFunds contractTF) {
+        String query = "INSERT INTO contract (address_contract, address_buyer, address_seller, id_real_estate, date) VALUES (?,?,?,?,?)";
+
+        try {
+
+            connection = DatabaseConnection.getInstance().getConnection();
+
+            PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+            ps.setString(1, contractTF.getContractAddress());
+            ps.setString(2, buyer.getAddress());
+            ps.setString(3, realEstate.getOwnerAddress());
+            ps.setInt(4, realEstate.getId());
+
+            LocalDate dateLocal = LocalDate.now();
+            Date dateSql = Date.valueOf(dateLocal);
+            ps.setDate(5, dateSql);
+
+            ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+
+            if (rs.next()) {
+                ps.close();
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error in saving contract to database");
+        }
     }
 
 }
