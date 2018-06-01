@@ -54,5 +54,9 @@ public class OfferTableModel extends AbstractTableModel {
     public String getColumnName(int column) {
         return columnNames[column];
     }
+    
+    public void refreshTable(){
+        fireTableDataChanged();
+    }
 
 }

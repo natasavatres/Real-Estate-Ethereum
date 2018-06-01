@@ -52,7 +52,7 @@ public class Controller {
         dbr.addAdminContract(contract);
     }
 
-    public void createBuyerContract(User currentUser, RealEstate currentRealEstate, BigInteger offer) {
+    public void createBuyerContract(User currentUser, RealEstate currentRealEstate, BigInteger offer) throws Exception {
         Contracts contract = new Contracts();
         contract.createBuyerContract(currentUser, currentRealEstate, offer);
     }
@@ -60,6 +60,16 @@ public class Controller {
     public List<Offer> getOffers(User seller) throws Exception {
         Contracts contract = new Contracts();
         return contract.getOffers(seller);
+    }
+
+    public void acceptOffer(String contractAddress, User seller) throws Exception {
+        Contracts contract = new Contracts();
+        contract.acceptOffer(contractAddress, seller);
+    }
+
+    public void declineOffer(String contractAddress, User seller) throws Exception {
+        Contracts contract = new Contracts();
+        contract.declineOffer(contractAddress, seller);
     }
 
 }

@@ -41,8 +41,8 @@ public class Contracts {
         controller = new Controller();
     }
 
-    public void createBuyerContract(User buyer, RealEstate realEstate, BigInteger offer) {
-        try {
+    public void createBuyerContract(User buyer, RealEstate realEstate, BigInteger offer) throws Exception {
+
             HttpService httpService = new HttpService("http://localhost:8545");
             Web3j web3 = Web3j.build(httpService);
 
@@ -62,9 +62,6 @@ public class Contracts {
             contractTF.setSeller(realEstate.getOwnerAddress()).send();
             contractTF.setOffer(offer).send();
 
-        } catch (Exception ex) {
-            Logger.getLogger(Contracts.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     public void sellerContract(String sellerAddress) {
@@ -188,17 +185,51 @@ public class Contracts {
         List<ContractEntity> contractEntityList = databaseRepository.getContractsWithSeller(seller);
 
         BigInteger offeredPrice;
+        String offerState;
+        String offerSet = "OfferSet";
         for (int i = 0; i < realEstatesFromSeller.size(); i++) {
             for (int j = 0; j < contractEntityList.size(); j++) {
                 if (realEstatesFromSeller.get(i).getId() == contractEntityList.get(j).getIdRealEstate()) {
                     String contractAddress = contractEntityList.get(j).getAddressContract();
                     contractTF = TransferingFunds.load(contractAddress, web3j, credentials, GAS_PRICE, GAS_LIMIT);
-                    offeredPrice = (BigInteger) contractTF.getOffer().send();
-                    offerList.add(new Offer(realEstatesFromSeller.get(i), offeredPrice));
+
+                    offerState = contractTF.getState().send();  
+                    System.out.println(offerState);
+                    
+                    if (offerSet.equals(offerState)) {
+                        offeredPrice = (BigInteger) contractTF.getOffer().send();
+                        offerList.add(new Offer(realEstatesFromSeller.get(i), offeredPrice, contractAddress));
+                    }
+                    
                 }
             }
         }
 
         return offerList;
     }
+
+    public void acceptOffer(String contractAddress, User seller) throws Exception {
+        HttpService httpService = new HttpService("http://localhost:8546");
+        Web3j web3j = Web3j.build(httpService);
+
+        String sellerPK = controller.getPrivateKey(seller.getUsername());
+        Credentials credentials = Credentials.create(sellerPK);
+
+        contractTF = TransferingFunds.load(contractAddress, web3j, credentials, GAS_PRICE, GAS_LIMIT);
+
+        contractTF.accept().send();
+    }
+
+    public void declineOffer(String contractAddress, User seller) throws Exception {
+        HttpService httpService = new HttpService("http://localhost:8546");
+        Web3j web3j = Web3j.build(httpService);
+
+        String sellerPK = controller.getPrivateKey(seller.getUsername());
+        Credentials credentials = Credentials.create(sellerPK);
+
+        contractTF = TransferingFunds.load(contractAddress, web3j, credentials, GAS_PRICE, GAS_LIMIT);
+
+        contractTF.decline().send();
+    }
+
 }

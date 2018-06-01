@@ -48,7 +48,8 @@ contract TransferingFunds{
     bool private accepted;
     bool private sent;
     uint private amount;
-    
+    string private state;
+
     struct RealEstate{
     address owner;
     string REaddress;
@@ -79,6 +80,11 @@ function setSeller(address s) public{
 
 function setOffer(uint proposalAmount) public{
     amount=proposalAmount;
+	state = "OfferSet";
+}
+
+function getState() public constant returns(string) {
+    return state;
 }
 
 function getOffer() public constant returns(uint) {
@@ -94,11 +100,15 @@ function getOffer() public constant returns(uint) {
 //}
 
 function accept() public returns(bool) {
+	state = "OfferAccepted";
    return accepted=true;
+
 }
 
 function decline() public returns(bool) {
+state = "OfferDeclined";
    return accepted=false;
+
 }
 
 function pay() payable public{

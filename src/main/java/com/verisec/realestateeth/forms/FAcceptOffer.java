@@ -13,6 +13,10 @@ import com.verisec.realestateeth.table.model.OfferTableModel;
 import com.verisec.realestateeth.table.model.RealEstateTableModel;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
 
 /**
@@ -27,13 +31,14 @@ public class FAcceptOffer extends javax.swing.JFrame {
     public FAcceptOffer() {
         initComponents();
     }
-    
+
     User currentUser;
     Controller controller = new Controller();
 
     FAcceptOffer(User seller) {
         initComponents();
         currentUser = seller;
+        centerForm();
         populateTableOffers(seller);
     }
 
@@ -46,11 +51,15 @@ public class FAcceptOffer extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTblOffers = new javax.swing.JTable();
         jBttnAccept = new javax.swing.JButton();
         jBttnDecline = new javax.swing.JButton();
+        jBttnBack = new javax.swing.JButton();
+
+        jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Received offers");
@@ -68,8 +77,25 @@ public class FAcceptOffer extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTblOffers);
 
         jBttnAccept.setText("Accept");
+        jBttnAccept.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBttnAcceptActionPerformed(evt);
+            }
+        });
 
         jBttnDecline.setText("Decline");
+        jBttnDecline.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBttnDeclineActionPerformed(evt);
+            }
+        });
+
+        jBttnBack.setText("Back");
+        jBttnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBttnBackActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -88,6 +114,10 @@ public class FAcceptOffer extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jBttnDecline, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jBttnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(109, 109, 109))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -100,16 +130,77 @@ public class FAcceptOffer extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBttnAccept)
                     .addComponent(jBttnDecline))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addComponent(jBttnBack)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    List<Offer> offers;
+    String contractAddress;
+
+    private void jBttnAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnAcceptActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = jTblOffers.getSelectedRow();
+
+        OfferTableModel offerTableModel = (OfferTableModel) jTblOffers.getModel();
+        
+        if (selectedRow >= 0) {
+
+            try {
+                contractAddress = offers.get(selectedRow).getContractAddress();
+                controller.acceptOffer(contractAddress, currentUser);
+
+                JOptionPane.showMessageDialog(null, "Offer accepted!");
+                offers.remove(selectedRow);
+
+                offerTableModel.refreshTable();
+
+            } catch (Exception ex) {
+                System.out.println("Error in accepting offer");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Please select offer!");
+        }
+    }//GEN-LAST:event_jBttnAcceptActionPerformed
+
+    private void jBttnDeclineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnDeclineActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = jTblOffers.getSelectedRow();
+
+        OfferTableModel offerTableModel = (OfferTableModel) jTblOffers.getModel();
+
+        if (selectedRow >= 0) {
+            try {
+                contractAddress = offers.get(selectedRow).getContractAddress();
+                controller.declineOffer(contractAddress, currentUser);
+
+                JOptionPane.showMessageDialog(null, "Offer declined!");
+                offers.remove(selectedRow);
+
+                offerTableModel.refreshTable();
+
+            } catch (Exception ex) {
+                System.out.println("Error in declining offer");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Please select offer!");
+        }
+    }//GEN-LAST:event_jBttnDeclineActionPerformed
+
+    private void jBttnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnBackActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jBttnBackActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBttnAccept;
+    private javax.swing.JButton jBttnBack;
     private javax.swing.JButton jBttnDecline;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTblOffers;
@@ -117,11 +208,15 @@ public class FAcceptOffer extends javax.swing.JFrame {
 
     private void populateTableOffers(User seller) {
         try {
-            List<Offer> offers = controller.getOffers(seller);
+            offers = controller.getOffers(seller);
             TableModel tm = new OfferTableModel(offers);
             jTblOffers.setModel(tm);
         } catch (Exception ex) {
             System.out.println("Error in populating table with real estates");
         }
+    }
+
+    private void centerForm() {
+        setLocationRelativeTo(null);
     }
 }

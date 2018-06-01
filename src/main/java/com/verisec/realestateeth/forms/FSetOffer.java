@@ -9,6 +9,8 @@ import com.verisec.realestateeth.controller.Controller;
 import com.verisec.realestateeth.domain.RealEstate;
 import com.verisec.realestateeth.domain.User;
 import java.math.BigInteger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -32,6 +34,7 @@ public class FSetOffer extends javax.swing.JFrame {
         initComponents();
         currentUser = user;
         currentRealEstate = realEstate;
+        centerForm();
         setRealEstateInfo(realEstate);
     }
 
@@ -58,6 +61,7 @@ public class FSetOffer extends javax.swing.JFrame {
         jTxtArea = new javax.swing.JTextField();
         jTxtDistance = new javax.swing.JTextField();
         jTxtPrice = new javax.swing.JTextField();
+        jBttnBack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Set Offer for Real Estate");
@@ -83,6 +87,13 @@ public class FSetOffer extends javax.swing.JFrame {
             }
         });
 
+        jBttnBack.setText("Back");
+        jBttnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBttnBackActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -90,40 +101,40 @@ public class FSetOffer extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(42, 42, 42)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3))
-                                .addGap(55, 55, 55)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTxtOwner, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
-                                    .addComponent(jTxtLocation)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5))
-                                .addGap(28, 28, 28)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTxtDistance)
-                                    .addComponent(jTxtArea)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addGap(108, 108, 108)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTxtPrice)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jTxtOffer, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jBttnSetOffer, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE))))))
-                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(34, 34, 34)
-                        .addComponent(jLabel7)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(143, 143, 143)
+                                    .addComponent(jTxtOffer, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jBttnSetOffer, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabel7))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel2)
+                                        .addComponent(jLabel3))
+                                    .addGap(55, 55, 55)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jTxtOwner, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
+                                        .addComponent(jTxtLocation)))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel4)
+                                        .addComponent(jLabel5))
+                                    .addGap(28, 28, 28)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jTxtDistance)
+                                        .addComponent(jTxtArea)))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel6)
+                                    .addGap(108, 108, 108)
+                                    .addComponent(jTxtPrice))
+                                .addComponent(jBttnBack, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(59, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -151,12 +162,14 @@ public class FSetOffer extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTxtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTxtOffer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7)
                     .addComponent(jBttnSetOffer))
-                .addGap(41, 41, 41))
+                .addGap(18, 18, 18)
+                .addComponent(jBttnBack)
+                .addContainerGap())
         );
 
         pack();
@@ -172,12 +185,23 @@ public class FSetOffer extends javax.swing.JFrame {
         } else {
             BigInteger offer = new BigInteger(offerS);
             controller = new Controller();
-            controller.createBuyerContract(currentUser, currentRealEstate, offer);
+            try {
+                controller.createBuyerContract(currentUser, currentRealEstate, offer);
+                JOptionPane.showMessageDialog(this, "Offer set successfully!");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error in setting offer!");
+            }
         }
     }//GEN-LAST:event_jBttnSetOfferActionPerformed
 
+    private void jBttnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnBackActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jBttnBackActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jBttnBack;
     private javax.swing.JButton jBttnSetOffer;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -206,5 +230,9 @@ public class FSetOffer extends javax.swing.JFrame {
         jTxtArea.setEnabled(false);
         jTxtDistance.setEnabled(false);
         jTxtPrice.setEnabled(false);
+    }
+
+    private void centerForm() {
+        setLocationRelativeTo(null);
     }
 }
