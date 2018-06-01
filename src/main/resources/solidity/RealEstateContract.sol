@@ -80,7 +80,10 @@ function setSeller(address s) public{
 
 function setOffer(uint proposalAmount) public{
     amount=proposalAmount;
-	state = "OfferSet";
+}
+
+function setState(string currentState) public{
+    state=currentState;
 }
 
 function getState() public constant returns(string) {
@@ -100,13 +103,11 @@ function getOffer() public constant returns(uint) {
 //}
 
 function accept() public returns(bool) {
-	state = "OfferAccepted";
    return accepted=true;
 
 }
 
 function decline() public returns(bool) {
-state = "OfferDeclined";
    return accepted=false;
 
 }
