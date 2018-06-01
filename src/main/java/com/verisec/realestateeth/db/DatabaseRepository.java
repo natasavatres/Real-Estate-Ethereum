@@ -148,7 +148,7 @@ public class DatabaseRepository {
         }
     }
 
-    public List<ContractEntity> getOffersBuyerSeller(User seller) {
+    public List<ContractEntity> getContractsWithSeller(User seller) {
 
         List<ContractEntity> contractEntityList = new ArrayList<>();
 
@@ -160,24 +160,26 @@ public class DatabaseRepository {
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                String addressContract = rs.getString("address_contract");
-                String addressBuyer = rs.getString("address_buyer");
-                String addressSeller = rs.getString("address_seller");
-                int idRE = rs.getInt("id_real_estate");
+                String addressContract = rs.getString(1);
+                String addressBuyer = rs.getString(2);
+                String addressSeller = rs.getString(3);
+                int idRE = rs.getInt(4);
 
-                java.sql.Date dateSql = rs.getDate("date");
+                java.sql.Date dateSql = rs.getDate(5);
                 java.util.Date dateUtil = new java.util.Date(dateSql.getTime());
 
                 contractEntityList.add(new ContractEntity(addressContract, addressBuyer, addressSeller, idRE, dateUtil));
 
-                rs.close();
-                ps.close();
-
             }
+
+            rs.close();
+            ps.close();
         } catch (Exception ex) {
             System.out.println("Error in getting offer buyer-seller");
         }
+
         return contractEntityList;
+
     }
 
 }

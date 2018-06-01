@@ -59,8 +59,8 @@ public class Contracts {
 
             databaseRepository.addContract(buyer, realEstate, contractTF);
 
-            contractTF.setSeller(realEstate.getOwnerAddress());
-            contractTF.setOffer(offer);
+            contractTF.setSeller(realEstate.getOwnerAddress()).send();
+            contractTF.setOffer(offer).send();
 
         } catch (Exception ex) {
             Logger.getLogger(Contracts.class.getName()).log(Level.SEVERE, null, ex);
@@ -171,32 +171,6 @@ public class Contracts {
         return realEstates;
     }
 
-//    public List<RealEstate> getOffersBuyerSeller(User seller) throws Exception {
-//        List<RealEstate> realEstatesFromSeller = getAllRealEstatesFromSeller(seller);
-//
-//        List<RealEstate> result = new ArrayList<>();
-//
-//        HttpService httpService = new HttpService("http://localhost:8546");
-//        Web3j web3j = Web3j.build(httpService);
-//
-//        DatabaseRepository dbr = new DatabaseRepository();
-//        String adminContractAddress = dbr.getContractAddress("000", "000");
-//
-//        String sellerPK = controller.getPrivateKey(seller.getUsername());
-//        Credentials credentials = Credentials.create(sellerPK);
-//
-//        List<ContractEntity> contractEntityList = databaseRepository.getOffersBuyerSeller(seller);
-//
-//        for (int i = 0; i < realEstatesFromSeller.size(); i++) {
-//            for (int j = 0; j < contractEntityList.size(); j++) {
-//                if (realEstatesFromSeller.get(i).getId() == contractEntityList.get(j).getIdRealEstate()) {
-//                    result.add(realEstatesFromSeller.get(i));
-//                }
-//            }
-//        }
-//
-//        return result;
-//    }
     public List<Offer> getOffers(User seller) throws Exception {
         List<RealEstate> realEstatesFromSeller = getAllRealEstatesFromSeller(seller);
 
@@ -211,17 +185,16 @@ public class Contracts {
         String sellerPK = controller.getPrivateKey(seller.getUsername());
         Credentials credentials = Credentials.create(sellerPK);
 
-        List<ContractEntity> contractEntityList = databaseRepository.getOffersBuyerSeller(seller);
+        List<ContractEntity> contractEntityList = databaseRepository.getContractsWithSeller(seller);
 
-//        BigInteger offeredPrice; PREBACI TRANS. REC. U BIGINT
+        BigInteger offeredPrice;
         for (int i = 0; i < realEstatesFromSeller.size(); i++) {
             for (int j = 0; j < contractEntityList.size(); j++) {
                 if (realEstatesFromSeller.get(i).getId() == contractEntityList.get(j).getIdRealEstate()) {
-
                     String contractAddress = contractEntityList.get(j).getAddressContract();
                     contractTF = TransferingFunds.load(contractAddress, web3j, credentials, GAS_PRICE, GAS_LIMIT);
-//                    offeredPrice = (BigInteger) contractTF.getOffer().send();
-//                    offerList.add(new Offer(realEstatesFromSeller.get(i), offeredPrice));
+                    offeredPrice = (BigInteger) contractTF.getOffer().send();
+                    offerList.add(new Offer(realEstatesFromSeller.get(i), offeredPrice));
                 }
             }
         }

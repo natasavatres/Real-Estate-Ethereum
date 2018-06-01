@@ -116,15 +116,6 @@ public class FAcceptOffer extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void populateTableOffers(User seller) {
-//        try {
-//            List<RealEstate> realEstates = controller.getOffersBuyerSeller(seller);
-//            BigInteger offer = controller.getOffersTransferingFunds(seller, realEstates);
-//            TableModel tm = new OfferTableModel(realEstates, offer);
-//            jTblOffers.setModel(tm);
-//        } catch (Exception ex) {
-//            System.out.println("Error in populating table with real estates");
-//        }
-
         try {
             List<Offer> offers = controller.getOffers(seller);
             TableModel tm = new OfferTableModel(offers);
