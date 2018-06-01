@@ -57,9 +57,9 @@ public class Controller {
         contract.createBuyerContract(currentUser, currentRealEstate, offer);
     }
 
-    public List<Offer> getOffers(User seller) throws Exception {
+    public List<Offer> getOffersSeller(User seller) throws Exception {
         Contracts contract = new Contracts();
-        return contract.getOffers(seller);
+        return contract.getOffersSeller(seller);
     }
 
     public void acceptOffer(String contractAddress, User seller) throws Exception {
@@ -70,6 +70,21 @@ public class Controller {
     public void declineOffer(String contractAddress, User seller) throws Exception {
         Contracts contract = new Contracts();
         contract.declineOffer(contractAddress, seller);
+    }
+
+    public List<Offer> getAllBuyerOffers(User buyer) throws Exception {
+        Contracts contract = new Contracts();
+        return contract.getAllBuyerOffers(buyer);
+    }
+
+    public void deleteContract(String contractAddress) {
+        DatabaseRepository dbr = new DatabaseRepository();
+        dbr.deleteContract(contractAddress);
+    }
+
+    public void payRealEstate(Offer offer, User buyer) throws Exception {
+        Contracts contract = new Contracts();
+        contract.payRealEstate(offer, buyer);
     }
 
 }

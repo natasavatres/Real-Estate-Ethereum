@@ -208,7 +208,7 @@ public class FAcceptOffer extends javax.swing.JFrame {
 
     private void populateTableOffers(User seller) {
         try {
-            offers = controller.getOffers(seller);
+            offers = controller.getOffersSeller(seller);
             TableModel tm = new OfferTableModel(offers);
             jTblOffers.setModel(tm);
         } catch (Exception ex) {

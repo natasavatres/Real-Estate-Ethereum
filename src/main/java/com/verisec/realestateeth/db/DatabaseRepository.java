@@ -182,4 +182,49 @@ public class DatabaseRepository {
 
     }
 
+    public List<ContractEntity> getAllBuyerContracts(User buyer) {
+        List<ContractEntity> contractEntityList = new ArrayList<>();
+
+        try {
+            connection = DatabaseConnection.getInstance().getConnection();
+            String query = "SELECT * FROM contract WHERE address_buyer = ?";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, buyer.getAddress());
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String addressContract = rs.getString(1);
+                String addressBuyer = rs.getString(2);
+                String addressSeller = rs.getString(3);
+                int idRE = rs.getInt(4);
+
+                java.sql.Date dateSql = rs.getDate(5);
+                java.util.Date dateUtil = new java.util.Date(dateSql.getTime());
+
+                contractEntityList.add(new ContractEntity(addressContract, addressBuyer, addressSeller, idRE, dateUtil));
+            }
+
+            rs.close();
+            ps.close();
+        } catch (Exception ex) {
+            System.out.println("Error in getting buyer's offers");
+        }
+
+        return contractEntityList;
+    }
+
+    public void deleteContract(String contractAddress) {
+        String query = "DELETE FROM contract WHERE address_contract = ?";
+
+        try {
+            connection = DatabaseConnection.getInstance().getConnection();
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, contractAddress);
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            System.out.println("Error in deleting contract from database");
+        }
+    }
+
 }

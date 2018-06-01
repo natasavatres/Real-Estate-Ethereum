@@ -131,5 +131,6 @@ public class FSeller extends javax.swing.JFrame {
         } catch (Exception ex) {
             System.out.println("Error in populating table with real estates from seller");
         }
+        jTblRealEstatesSeller.disable();
     }
 }

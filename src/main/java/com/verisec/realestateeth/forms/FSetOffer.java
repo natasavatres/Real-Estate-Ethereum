@@ -9,8 +9,6 @@ import com.verisec.realestateeth.controller.Controller;
 import com.verisec.realestateeth.domain.RealEstate;
 import com.verisec.realestateeth.domain.User;
 import java.math.BigInteger;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**

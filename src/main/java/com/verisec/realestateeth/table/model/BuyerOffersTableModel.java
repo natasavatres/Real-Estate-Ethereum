@@ -5,7 +5,7 @@
  */
 package com.verisec.realestateeth.table.model;
 
-import com.verisec.realestateeth.domain.RealEstate;
+import com.verisec.realestateeth.domain.Offer;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
@@ -13,39 +13,37 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Natasa Vatres
  */
-public class RealEstateTableModel extends AbstractTableModel{
-    
-    private final List<RealEstate> realEstates;
-    private String [] columnNames = new String[]{"Owner","Address","Area","Distance from center","Price"};
+public class BuyerOffersTableModel extends AbstractTableModel {
 
-    public RealEstateTableModel(List<RealEstate> realEstates) {
-        this.realEstates = realEstates;
+    private final List<Offer> allOffers;
+    private String[] columnNames = new String[]{"Location", "Price", "Offered price", "Status"};
+
+    public BuyerOffersTableModel(List<Offer> allOffers) {
+        this.allOffers = allOffers;
     }
 
     @Override
     public int getRowCount() {
-        return realEstates == null ? 0 : realEstates.size();
+        return allOffers == null ? 0 : allOffers.size();
     }
 
     @Override
     public int getColumnCount() {
-        return 5;
+        return 4;
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        RealEstate realEstate = realEstates.get(rowIndex);
+        Offer offer = allOffers.get(rowIndex);
         switch (columnIndex) {
             case 0:
-                return realEstate.getOwnerAddress();
+                return offer.getRealEstate().getRealEstateAddress();
             case 1:
-                return realEstate.getRealEstateAddress();
+                return offer.getRealEstate().getPrice();
             case 2:
-                return realEstate.getArea();
+                return offer.getOffer();
             case 3:
-                return realEstate.getCenterDistance();
-            case 4:
-                return realEstate.getPrice();
+                return offer.getStatus();
             default:
                 return "N/A";
         }
@@ -55,8 +53,12 @@ public class RealEstateTableModel extends AbstractTableModel{
     public String getColumnName(int column) {
         return columnNames[column];
     }
-    
-    public void refreshTable(){
+
+    public void refreshTable() {
         fireTableDataChanged();
+    }
+    
+    public List<Offer> getAllOffersList(){
+        return allOffers;
     }
 }

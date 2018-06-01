@@ -9,7 +9,10 @@ import com.verisec.realestateeth.controller.Controller;
 import com.verisec.realestateeth.domain.RealEstate;
 import com.verisec.realestateeth.domain.User;
 import com.verisec.realestateeth.table.model.RealEstateTableModel;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
@@ -28,7 +31,7 @@ public class FBuyer extends javax.swing.JFrame {
     }
 
     User currentUser;
-    
+
     public FBuyer(User user) {
         initComponents();
         centerForm();
@@ -99,6 +102,11 @@ public class FBuyer extends javax.swing.JFrame {
         );
 
         jBttnCheck.setText("Check your offers");
+        jBttnCheck.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBttnCheckActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -129,22 +137,28 @@ public class FBuyer extends javax.swing.JFrame {
     private void jBttnBuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnBuyActionPerformed
         // TODO add your handling code here:
         int selectedRow = jTblRealEstates.getSelectedRow();
-        if (selectedRow >= 0) {        
+        if (selectedRow >= 0) {
             String ownerAddress = (String) jTblRealEstates.getValueAt(selectedRow, 0);
             String reAddress = (String) jTblRealEstates.getValueAt(selectedRow, 1);
             int area = (int) jTblRealEstates.getValueAt(selectedRow, 2);
             int distance = (int) jTblRealEstates.getValueAt(selectedRow, 3);
             int price = (int) jTblRealEstates.getValueAt(selectedRow, 4);
-            
-            RealEstate realEstate = new RealEstate(selectedRow+1, ownerAddress, reAddress, area, distance, price);
-            
+
+            RealEstate realEstate = new RealEstate(selectedRow + 1, ownerAddress, reAddress, area, distance, price);
+
             JFrame fSetOffer = new FSetOffer(currentUser, realEstate);
             fSetOffer.setVisible(true);
-    
+
         } else {
             JOptionPane.showMessageDialog(null, "Please select real estate!");
         }
     }//GEN-LAST:event_jBttnBuyActionPerformed
+
+    private void jBttnCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnCheckActionPerformed
+        // TODO add your handling code here:
+        JFrame fCBO = new FCheckBuyerOffers(currentUser);
+        fCBO.setVisible(true);
+    }//GEN-LAST:event_jBttnCheckActionPerformed
 
     /**
      * @param args the command line arguments
@@ -168,11 +182,40 @@ public class FBuyer extends javax.swing.JFrame {
     private void populateTableRealEstates(User user) {
         try {
             List<RealEstate> realEstates = controller.getAllRealEstates(user);
-            TableModel tm = new RealEstateTableModel(realEstates);
-            jTblRealEstates.setModel(tm);
+
+//            List<RealEstate> filteredListRealEstates = filterListForBuyerView(realEstates);
+
+            RealEstateTableModel realEstateTableModel = new RealEstateTableModel(realEstates);
+            jTblRealEstates.setModel(realEstateTableModel);
+            
+            realEstateTableModel.refreshTable();
+            
         } catch (Exception ex) {
             System.out.println("Error in populating table with real estates");
         }
+    }
+
+    private List<RealEstate> filterListForBuyerView(List<RealEstate> realEstates) {
+
+        List<RealEstate> filtered = new ArrayList<>();
+        List<RealEstate> realEstates2 = realEstates;
+       
+        int i = 0, j=1;
+        RealEstate re1 = realEstates.get(i);
+        RealEstate re2 = realEstates.get(j);
+        while(realEstates2.size()>0){
+            while (realEstates2.size()>0) {                
+                if(re1.getRealEstateAddress().equals(re2.getRealEstateAddress())){
+                    filtered.add(re1);
+                    realEstates2.remove(re1);
+                    realEstates2.remove(re2);
+                    j = i+1;
+                }
+            }
+            i++; 
+        }
+
+        return filtered;
     }
 
 }
