@@ -5,16 +5,16 @@ contract BuyingSelling {
 struct RealEstate{
 address owner;
 string REaddress;
-uint area;
-uint centerDistance;
-uint price;
+int area;
+int centerDistance;
+int price;
 }
 
-mapping (uint => RealEstate) realestates;
+mapping (int => RealEstate) realestates;
 
-uint[] public realestatesArray;
+int[] public realestatesArray;
 
-function setRealEstate(uint id, address o, string rea, uint a, uint cd, uint p) public {
+function setRealEstate(int id, address o, string rea, int a, int cd, int p) public {
     var realEstate= realestates[id];
     realEstate.owner=o;
      realEstate.REaddress=rea;
@@ -26,11 +26,11 @@ function setRealEstate(uint id, address o, string rea, uint a, uint cd, uint p) 
     
 }
 
-function getAllRealEstates() view public returns(uint[]){
+function getAllRealEstates() view public returns(int[]){
     return realestatesArray;
 }
 
-function getRealEstate(uint id) view public returns(uint, address, string, uint, uint, uint) {
+function getRealEstate(int id) view public returns(int, address, string, int, int, int) {
     return (id, realestates[id].owner, realestates[id].REaddress, realestates[id].area, realestates[id].centerDistance, realestates[id].price);
 }
 
@@ -44,17 +44,17 @@ contract TransferingFounds{
     
     BuyingSelling bs;
     address private seller;
-    uint private i;
+    int private i;
     bool private accepted;
     bool private sent;
-    uint256 private amount;
+    int private amount;
     
     struct RealEstate{
     address owner;
     string REaddress;
-    uint area;
-    uint centerDistance;
-    uint price;
+    int area;
+    int centerDistance;
+    int price;
     }
     
 function TransferingFounds(address t) public{
@@ -63,7 +63,7 @@ function TransferingFounds(address t) public{
     
     RealEstate rs;
     
-function changeOwner(uint id, string rea, uint a, uint cd, uint p) public {
+function changeOwner(int id, string rea, int a, int cd, int p) public {
     rs.owner=msg.sender;
     i=id;
     rs.REaddress=rea;
@@ -77,11 +77,11 @@ function setSeller(address s) public{
    seller=s;
 }
 
-function setOffer(uint proposalAmount) public{
+function setOffer(int proposalAmount) public{
     amount=proposalAmount;
 }
 
-function getOffer() public returns(uint) {
+function getOffer() public returns(int) {
     return amount;
 }
 
@@ -103,7 +103,7 @@ function decline() public returns(bool) {
 
 function pay() payable public{
    if(accepted){
-       sent=seller.send(amount);
+       sent=seller.send(uint256(amount));
    }
    if(sent){
         bs.setRealEstate(i,rs.owner, rs.REaddress, rs.area, rs.centerDistance, rs.price);
