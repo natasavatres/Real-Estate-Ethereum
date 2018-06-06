@@ -109,7 +109,7 @@ public class FLogin extends javax.swing.JFrame {
                 dispose();
 
                 if (user.getRole().equals("admin")) {
-                    JFrame fAdmin = new FAdmin();
+                    JFrame fAdmin = new FAdmin(user);
                     fAdmin.setVisible(true);
                 }
                 //ne radi ako ne udje admin prvi

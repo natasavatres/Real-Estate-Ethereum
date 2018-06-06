@@ -132,6 +132,9 @@ public class FCheckBuyerOffers extends javax.swing.JFrame {
     private void jBttnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnBackActionPerformed
         // TODO add your handling code here:
         this.dispose();
+        
+        FBuyer fBuyer = new FBuyer(currentUser);
+        fBuyer.setVisible(true);
     }//GEN-LAST:event_jBttnBackActionPerformed
 
     private void jBttnPayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnPayActionPerformed

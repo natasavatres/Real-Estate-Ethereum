@@ -278,10 +278,16 @@ public class Contracts {
 
         String buyerPK = controller.getPrivateKey(buyer.getUsername());
         Credentials credentials = Credentials.create(buyerPK);
+        
+        DatabaseRepository dbr = new DatabaseRepository();
+        String adminContractAddress = dbr.getContractAddress("000", "000");
+        contractBS = BuyingSelling.load(adminContractAddress, web3j, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386));
 
+        List<BigInteger> realEstateIDs = (List<BigInteger>) contractBS.getAllRealEstates().send();
+        int listSize = realEstateIDs.size();
         contractTF = TransferingFunds.load(offer.getContractAddress(), web3j, credentials, GAS_PRICE, GAS_LIMIT);
         
-        contractTF.changeOwner(BigInteger.valueOf(offer.getRealEstate().getId()),
+        contractTF.changeOwner(BigInteger.valueOf(listSize+1),
                 offer.getRealEstate().getRealEstateAddress(),
                 BigInteger.valueOf(offer.getRealEstate().getArea()),
                 BigInteger.valueOf(offer.getRealEstate().getCenterDistance()),

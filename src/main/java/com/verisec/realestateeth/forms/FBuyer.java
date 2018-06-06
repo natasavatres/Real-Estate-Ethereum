@@ -10,12 +10,9 @@ import com.verisec.realestateeth.domain.RealEstate;
 import com.verisec.realestateeth.domain.User;
 import com.verisec.realestateeth.table.model.RealEstateTableModel;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.table.TableModel;
 
 /**
  *
@@ -37,6 +34,7 @@ public class FBuyer extends javax.swing.JFrame {
         centerForm();
         currentUser = user;
         populateTableRealEstates(user);
+//        setColumnSizes();
     }
 
     /**
@@ -53,7 +51,8 @@ public class FBuyer extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTblRealEstates = new javax.swing.JTable();
         jBttnBuy = new javax.swing.JButton();
-        jBttnCheck = new javax.swing.JButton();
+        jBttnCheckOffers = new javax.swing.JButton();
+        jBttnCheckHistory = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Purchase real estate");
@@ -86,8 +85,8 @@ public class FBuyer extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jBttnBuy, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -101,10 +100,17 @@ public class FBuyer extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        jBttnCheck.setText("Check your offers");
-        jBttnCheck.addActionListener(new java.awt.event.ActionListener() {
+        jBttnCheckOffers.setText("Check your offers");
+        jBttnCheckOffers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBttnCheckActionPerformed(evt);
+                jBttnCheckOffersActionPerformed(evt);
+            }
+        });
+
+        jBttnCheckHistory.setText("Check ownership history");
+        jBttnCheckHistory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBttnCheckHistoryActionPerformed(evt);
             }
         });
 
@@ -117,8 +123,10 @@ public class FBuyer extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jBttnCheck, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(10, 10, 10)
+                        .addComponent(jBttnCheckHistory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(351, 351, 351)
+                        .addComponent(jBttnCheckOffers, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -127,7 +135,9 @@ public class FBuyer extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jBttnCheck)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jBttnCheckOffers)
+                    .addComponent(jBttnCheckHistory))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -154,11 +164,24 @@ public class FBuyer extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jBttnBuyActionPerformed
 
-    private void jBttnCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnCheckActionPerformed
+    private void jBttnCheckOffersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnCheckOffersActionPerformed
         // TODO add your handling code here:
         JFrame fCBO = new FCheckBuyerOffers(currentUser);
         fCBO.setVisible(true);
-    }//GEN-LAST:event_jBttnCheckActionPerformed
+    }//GEN-LAST:event_jBttnCheckOffersActionPerformed
+
+    private void jBttnCheckHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnCheckHistoryActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = jTblRealEstates.getSelectedRow();
+        if (selectedRow >= 0) {
+            
+            FOwnershipHistory fOwnershipHistory = new FOwnershipHistory(currentUser, selectedRow);
+            fOwnershipHistory.setVisible(true);
+            
+        } else {
+            JOptionPane.showMessageDialog(null, "Please select real estate!");
+        }
+    }//GEN-LAST:event_jBttnCheckHistoryActionPerformed
 
     /**
      * @param args the command line arguments
@@ -166,7 +189,8 @@ public class FBuyer extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBttnBuy;
-    private javax.swing.JButton jBttnCheck;
+    private javax.swing.JButton jBttnCheckHistory;
+    private javax.swing.JButton jBttnCheckOffers;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -183,13 +207,13 @@ public class FBuyer extends javax.swing.JFrame {
         try {
             List<RealEstate> realEstates = controller.getAllRealEstates(user);
 
-//            List<RealEstate> filteredListRealEstates = filterListForBuyerView(realEstates);
+            List<RealEstate> filteredListRealEstates = filterListForBuyerView(realEstates);
 
-            RealEstateTableModel realEstateTableModel = new RealEstateTableModel(realEstates);
+            RealEstateTableModel realEstateTableModel = new RealEstateTableModel(filteredListRealEstates);
             jTblRealEstates.setModel(realEstateTableModel);
-            
+
             realEstateTableModel.refreshTable();
-            
+
         } catch (Exception ex) {
             System.out.println("Error in populating table with real estates");
         }
@@ -198,24 +222,29 @@ public class FBuyer extends javax.swing.JFrame {
     private List<RealEstate> filterListForBuyerView(List<RealEstate> realEstates) {
 
         List<RealEstate> filtered = new ArrayList<>();
-        List<RealEstate> realEstates2 = realEstates;
-       
-        int i = 0, j=1;
-        RealEstate re1 = realEstates.get(i);
-        RealEstate re2 = realEstates.get(j);
-        while(realEstates2.size()>0){
-            while (realEstates2.size()>0) {                
-                if(re1.getRealEstateAddress().equals(re2.getRealEstateAddress())){
-                    filtered.add(re1);
-                    realEstates2.remove(re1);
-                    realEstates2.remove(re2);
-                    j = i+1;
+
+        int index;
+        for (int i = 0; i < realEstates.size(); i++) {
+            index = -1;
+            for (int j = i + 1; j < realEstates.size(); j++) {
+                if (realEstates.get(i).getRealEstateAddress().equals(realEstates.get(j).getRealEstateAddress())) {
+                    index = i;
                 }
             }
-            i++; 
+            if (index == -1) {
+                filtered.add(realEstates.get(i));
+            }
         }
 
         return filtered;
+    }
+
+    private void setColumnSizes() {
+        jTblRealEstates.getColumnModel().getColumn(0).setPreferredWidth(250);
+        jTblRealEstates.getColumnModel().getColumn(1).setPreferredWidth(100);
+        jTblRealEstates.getColumnModel().getColumn(2).setPreferredWidth(50);
+        jTblRealEstates.getColumnModel().getColumn(3).setPreferredWidth(100);
+        jTblRealEstates.getColumnModel().getColumn(4).setPreferredWidth(80);
     }
 
 }
