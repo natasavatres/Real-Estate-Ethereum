@@ -16,19 +16,17 @@ public class User {
     private String password;
     private String firstName;
     private String lastName;
-    private String role;
     private String privateKey;
 
     public User() {
     }
 
-    public User(String address, String username, String password, String firstName, String lastName, String role, String privateKey) {
+    public User(String address, String username, String password, String firstName, String lastName, String privateKey) {
         this.address = address;
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.role = role;
         this.privateKey = privateKey;
     }
 
@@ -70,14 +68,6 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
     public String getPrivateKey() {

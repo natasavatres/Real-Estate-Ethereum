@@ -40,10 +40,9 @@ public class DatabaseRepository {
             String password = rs.getString("password");
             String firstName = rs.getString("first_name");
             String lastName = rs.getString("last_name");
-            String role = rs.getString("role");
             String privateKey = rs.getString("private_key");
 
-            User user = new User(userAddress, username, password, firstName, lastName, role, privateKey);
+            User user = new User(userAddress, username, password, firstName, lastName, privateKey);
 
             rs.close();
             ps.close();
