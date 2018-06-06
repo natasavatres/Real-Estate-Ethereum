@@ -16,7 +16,6 @@ import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tuples.generated.Tuple6;
 import static org.web3j.tx.Contract.GAS_LIMIT;
@@ -278,7 +277,7 @@ public class Contracts {
 
         String buyerPK = controller.getPrivateKey(buyer.getUsername());
         Credentials credentials = Credentials.create(buyerPK);
-        
+
         DatabaseRepository dbr = new DatabaseRepository();
         String adminContractAddress = dbr.getContractAddress("000", "000");
         contractBS = BuyingSelling.load(adminContractAddress, web3j, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386));
@@ -286,15 +285,82 @@ public class Contracts {
         List<BigInteger> realEstateIDs = (List<BigInteger>) contractBS.getAllRealEstates().send();
         int listSize = realEstateIDs.size();
         contractTF = TransferingFunds.load(offer.getContractAddress(), web3j, credentials, GAS_PRICE, GAS_LIMIT);
-        
-        contractTF.changeOwner(BigInteger.valueOf(listSize+1),
+
+        contractTF.changeOwner(BigInteger.valueOf(listSize + 1),
                 offer.getRealEstate().getRealEstateAddress(),
                 BigInteger.valueOf(offer.getRealEstate().getArea()),
                 BigInteger.valueOf(offer.getRealEstate().getCenterDistance()),
                 BigInteger.valueOf(offer.getRealEstate().getPrice())).send();
-        
+
         contractTF.pay(GAS_PRICE).send();
 
+    }
+
+    public int getIdForNewRealEstate(User admin) throws Exception {
+        HttpService httpService = new HttpService("http://localhost:8546");
+        Web3j web3j = Web3j.build(httpService);
+
+        String adminPK = controller.getPrivateKey(admin.getUsername());
+        Credentials credentials = Credentials.create(adminPK);
+
+        DatabaseRepository dbr = new DatabaseRepository();
+        String adminContractAddress = dbr.getContractAddress("000", "000");
+        contractBS = BuyingSelling.load(adminContractAddress, web3j, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386));
+
+        List<BigInteger> realEstateIDs = (List<BigInteger>) contractBS.getAllRealEstates().send();
+
+        return realEstateIDs.size() + 1;
+    }
+
+    public void addRealEstate(RealEstate re) throws Exception {
+        HttpService httpService = new HttpService("http://localhost:8546");
+        Web3j web3 = Web3j.build(httpService);
+
+        String adminPK = controller.getPrivateKey("admin");
+        Credentials credentials = Credentials.create(adminPK);
+
+        DatabaseRepository dbr = new DatabaseRepository();
+        String adminContractAddress = dbr.getContractAddress("000", "000");
+
+        contractBS = BuyingSelling.load(adminContractAddress, web3, credentials, GAS_PRICE, GAS_LIMIT);
+
+        contractBS.setRealEstate(BigInteger.valueOf(re.getId()), re.getOwnerAddress(), re.getRealEstateAddress(),
+                BigInteger.valueOf(re.getArea()), BigInteger.valueOf(re.getCenterDistance()),
+                BigInteger.valueOf(re.getPrice())).send();
+
+    }
+
+    public int getIdByOwnerAndLocation(User buyer, String ownerAddress, String reAddress) throws Exception {
+        HttpService httpService = new HttpService("http://localhost:8546");
+        Web3j web3 = Web3j.build(httpService);
+
+        String buyerPK = controller.getPrivateKey(buyer.getUsername());
+        Credentials credentials = Credentials.create(buyerPK);
+
+        DatabaseRepository dbr = new DatabaseRepository();
+        String adminContractAddress = dbr.getContractAddress("000", "000");
+
+        contractBS = BuyingSelling.load(adminContractAddress, web3, credentials, GAS_PRICE, GAS_LIMIT);
+        
+        List<BigInteger> realEstateIDs = (List<BigInteger>) contractBS.getAllRealEstates().send();
+
+        Tuple6<BigInteger, String, String, BigInteger, BigInteger, BigInteger> returnVal;
+
+        for (BigInteger realEstateID : realEstateIDs) {
+            returnVal = contractBS.getRealEstate(realEstateID).send();
+            BigInteger idRE = returnVal.getValue1();
+            String ownerAddr = returnVal.getValue2();
+            String reAddr = returnVal.getValue3();
+            BigInteger area = returnVal.getValue4();
+            BigInteger dist = returnVal.getValue5();
+            BigInteger price = returnVal.getValue6();
+
+            if (ownerAddr.equals(ownerAddress) && reAddr.equals(reAddress)) {
+                return idRE.intValue();
+            }
+        }
+
+        return -1;
     }
 
 }

@@ -108,7 +108,6 @@ public class FAdmin extends javax.swing.JFrame {
         FAddRealEstate fAddRealEstate = new FAddRealEstate(admin);
         fAddRealEstate.setVisible(true);
 
-        dispose();
     }//GEN-LAST:event_jBttnAddRealEstateActionPerformed
 
     private void jBttnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnStartActionPerformed
@@ -119,6 +118,7 @@ public class FAdmin extends javax.swing.JFrame {
 
             jLblMessage.setText("Application successfully started!");
             jBttnAddRealEstate.setEnabled(true);
+            jBttnStart.setEnabled(false);
         } catch (Exception e) {
             logger.error("Error in Real Estate Contract deploy!", e);
             jLblMessage.setText("Error in Real Estate Contract deploy!");
@@ -130,7 +130,8 @@ public class FAdmin extends javax.swing.JFrame {
         // TODO add your handling code here:
         FLogin fLogin = new FLogin();
         fLogin.setVisible(true);
-        
+        admin = null;
+
         dispose();
     }//GEN-LAST:event_jBttnLogOutActionPerformed
 
@@ -149,23 +150,18 @@ final static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(
     private void firstFormView() {
         jBttnStart.setEnabled(false);
         jBttnAddRealEstate.setEnabled(false);
-        
+
         DatabaseRepository dbr = new DatabaseRepository();
         try {
             String adminContractAddress = dbr.getContractAddress("000", "000");
-            
-            if(adminContractAddress.isEmpty()){
-                jBttnStart.setEnabled(true);
-            }else{
-                jLblMessage.setText("Application successfully started!");
-                jBttnAddRealEstate.setEnabled(true);
-            }
-            
+
+            jLblMessage.setText("Application successfully started!");
+            jBttnAddRealEstate.setEnabled(true);
+
         } catch (Exception ex) {
-            Logger.getLogger(FAdmin.class.getName()).log(Level.SEVERE, null, ex);
+            jBttnStart.setEnabled(true);
         }
-        
+
     }
-    
 
 }

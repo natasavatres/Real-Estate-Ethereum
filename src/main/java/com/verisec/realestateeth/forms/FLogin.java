@@ -108,21 +108,14 @@ public class FLogin extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Welcome " + user.getFirstName() + "!");
                 dispose();
 
-                if (user.getRole().equals("admin")) {
+                if (user.getUsername().equals("admin")) {
                     JFrame fAdmin = new FAdmin(user);
                     fAdmin.setVisible(true);
-                }
-                //ne radi ako ne udje admin prvi
-
-                if (user.getRole().equals("buyer")) {
-                    JFrame fBuyer = new FBuyer(user);
-                    fBuyer.setVisible(true);
+                }else{
+                    FAllRealEstates fAllRealEstates = new FAllRealEstates(user);
+                    fAllRealEstates.setVisible(true);
                 }
 
-                if (user.getRole().equals("seller")) {
-                    JFrame fSeller = new FSeller(user);
-                    fSeller.setVisible(true);
-                }
             }
 
         } catch (Exception ex) {

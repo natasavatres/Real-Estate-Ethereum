@@ -6,8 +6,12 @@
 package com.verisec.realestateeth.forms;
 
 import com.verisec.realestateeth.controller.Controller;
+import com.verisec.realestateeth.domain.Contracts;
 import com.verisec.realestateeth.domain.RealEstate;
 import com.verisec.realestateeth.domain.User;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -24,10 +28,12 @@ public class FAddRealEstate extends javax.swing.JFrame {
 
     User currentUser;
     RealEstate currentRealEstate;
-    Controller controller;
+    Controller controller = new Controller();
+    Contracts contracts = new Contracts();
 
     public FAddRealEstate(User admin) {
         initComponents();
+        centerForm();
         currentUser = admin;
     }
 
@@ -46,19 +52,23 @@ public class FAddRealEstate extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jTxtAddress = new javax.swing.JTextField();
-        jLabelID = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jTxtArea = new javax.swing.JTextField();
         jTxtDistanceFromCenter = new javax.swing.JTextField();
         jTxtPrice = new javax.swing.JTextField();
-        jTxtID = new javax.swing.JTextField();
+        jBttnBack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Add new real estate");
 
         jBttnAdd.setText("Add");
+        jBttnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBttnAddActionPerformed(evt);
+            }
+        });
 
         jLOwner.setText("Owner:");
 
@@ -66,13 +76,18 @@ public class FAddRealEstate extends javax.swing.JFrame {
 
         jLabel2.setText("Address:");
 
-        jLabelID.setText("ID:");
-
         jLabel4.setText("Area:");
 
         jLabel5.setText("Distance from center:");
 
         jLabel6.setText("Price:");
+
+        jBttnBack.setText("Back");
+        jBttnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBttnBackActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -99,13 +114,9 @@ public class FAddRealEstate extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jLabelID, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLOwner, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE))
+                                .addComponent(jLOwner, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(35, 35, 35)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTxtOwner)
-                                    .addComponent(jTxtID)))
+                                .addComponent(jTxtOwner))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(35, 35, 35)
@@ -115,7 +126,10 @@ public class FAddRealEstate extends javax.swing.JFrame {
                                 .addGap(106, 106, 106)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jBttnAdd, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jTxtPrice, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE))))
+                                    .addComponent(jTxtPrice, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jBttnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(32, 32, 32))))
         );
         layout.setVerticalGroup(
@@ -123,11 +137,7 @@ public class FAddRealEstate extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelID)
-                    .addComponent(jTxtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLOwner)
                     .addComponent(jTxtOwner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -149,26 +159,65 @@ public class FAddRealEstate extends javax.swing.JFrame {
                     .addComponent(jTxtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(26, 26, 26)
                 .addComponent(jBttnAdd)
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jBttnBack)
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jBttnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnAddActionPerformed
+        // TODO add your handling code here:
+
+        String ownerAddress = jTxtOwner.getText().trim();
+        String location = jTxtAddress.getText().trim();
+        int area = Integer.parseInt(jTxtArea.getText().trim());
+        int centerDistance = Integer.parseInt(jTxtDistanceFromCenter.getText().trim());
+        int price = Integer.parseInt(jTxtPrice.getText().trim());
+
+        try {
+            int id = contracts.getIdForNewRealEstate(currentUser);
+            RealEstate re = new RealEstate(id, ownerAddress, location, area, centerDistance, price);
+
+            contracts.addRealEstate(re);
+
+            JOptionPane.showMessageDialog(this, "Real estate successfully added!");
+
+            jTxtAddress.setText("");
+            jTxtArea.setText("");
+            jTxtDistanceFromCenter.setText("");
+            jTxtOwner.setText("");
+            jTxtPrice.setText("");
+
+        } catch (Exception ex) {
+            Logger.getLogger(FAddRealEstate.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Error in adding new real estate!");
+        }
+
+    }//GEN-LAST:event_jBttnAddActionPerformed
+
+    private void jBttnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnBackActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_jBttnBackActionPerformed
+    
+    private void centerForm() {
+        setLocationRelativeTo(null);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBttnAdd;
+    private javax.swing.JButton jBttnBack;
     private javax.swing.JLabel jLOwner;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabelID;
     private javax.swing.JTextField jTxtAddress;
     private javax.swing.JTextField jTxtArea;
     private javax.swing.JTextField jTxtDistanceFromCenter;
-    private javax.swing.JTextField jTxtID;
     private javax.swing.JTextField jTxtOwner;
     private javax.swing.JTextField jTxtPrice;
     // End of variables declaration//GEN-END:variables

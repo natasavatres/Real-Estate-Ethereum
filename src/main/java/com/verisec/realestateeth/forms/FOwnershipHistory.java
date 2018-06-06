@@ -31,11 +31,12 @@ public class FOwnershipHistory extends javax.swing.JFrame {
     User currentUser;
     int realEstateID;
 
-    FOwnershipHistory(User user, int selectedRow) {
+    FOwnershipHistory(User user, int id) {
         initComponents();
         currentUser = user;
-        realEstateID = selectedRow;
-        populateTableOwnershipHistory();
+        realEstateID = id;
+        populateTableOwnershipHistory(id);
+        centerForm();
     }
 
     /**
@@ -118,28 +119,33 @@ public class FOwnershipHistory extends javax.swing.JFrame {
     private javax.swing.JTable jTblOwnershipHistory;
     // End of variables declaration//GEN-END:variables
 
-    private void populateTableOwnershipHistory() {        
+    private void populateTableOwnershipHistory(int id) {
         try {
             List<RealEstate> realEstates = controller.getAllRealEstates(currentUser);
-            List<RealEstate> ownershipHistoryList = filterHistoryListForBuyerView(realEstates);
+            List<RealEstate> ownershipHistoryList = filterHistoryListForBuyerView(realEstates, id);
 
             RealEstateTableModel realEstateTableModel = new RealEstateTableModel(ownershipHistoryList);
             jTblOwnershipHistory.setModel(realEstateTableModel);
-            
+
         } catch (Exception ex) {
             Logger.getLogger(FOwnershipHistory.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
-    private List<RealEstate> filterHistoryListForBuyerView(List<RealEstate> realEstates) {
+    private List<RealEstate> filterHistoryListForBuyerView(List<RealEstate> realEstates, int id) {
         List<RealEstate> filtered = new ArrayList<>();
-        
+
         for (int i = 0; i < realEstates.size(); i++) {
-            if (realEstates.get(realEstateID).getRealEstateAddress().equals(realEstates.get(i).getRealEstateAddress())) {
-               filtered.add(realEstates.get(i));
+            if (realEstates.get(id - 1).getRealEstateAddress().equals(realEstates.get(i).getRealEstateAddress())) {
+                filtered.add(realEstates.get(i));
             }
         }
         return filtered;
+    }
+
+    private void centerForm() {
+        setLocationRelativeTo(null);
+
     }
 }

@@ -186,6 +186,7 @@ public class FSetOffer extends javax.swing.JFrame {
             try {
                 controller.createBuyerContract(currentUser, currentRealEstate, offer);
                 JOptionPane.showMessageDialog(this, "Offer set successfully!");
+                dispose();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Error in setting offer!");
             }

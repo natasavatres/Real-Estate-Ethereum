@@ -6,11 +6,14 @@
 package com.verisec.realestateeth.forms;
 
 import com.verisec.realestateeth.controller.Controller;
+import com.verisec.realestateeth.domain.Contracts;
 import com.verisec.realestateeth.domain.RealEstate;
 import com.verisec.realestateeth.domain.User;
 import com.verisec.realestateeth.table.model.RealEstateTableModel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -28,6 +31,8 @@ public class FBuyer extends javax.swing.JFrame {
     }
 
     User currentUser;
+    Contracts contracts = new Contracts();
+    Controller controller = new Controller();
 
     public FBuyer(User user) {
         initComponents();
@@ -48,16 +53,66 @@ public class FBuyer extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTblRealEstates = new javax.swing.JTable();
         jBttnBuy = new javax.swing.JButton();
         jBttnCheckOffers = new javax.swing.JButton();
+        jBttnLogOut = new javax.swing.JButton();
         jBttnCheckHistory = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTblRealEstates = new javax.swing.JTable();
+        jBttnBack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Purchase real estate");
+        setMaximumSize(null);
+        setPreferredSize(new java.awt.Dimension(810, 410));
+        setResizable(false);
+        setSize(new java.awt.Dimension(810, 410));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
-        jLabel2.setText("Available real estates:");
+        jPanel1.setMaximumSize(null);
+        jPanel1.setPreferredSize(new java.awt.Dimension(500, 500));
+
+        jLabel2.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        jLabel2.setText("Available real estates");
+
+        jBttnBuy.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        jBttnBuy.setText("Buy");
+        jBttnBuy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBttnBuyActionPerformed(evt);
+            }
+        });
+
+        jBttnCheckOffers.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        jBttnCheckOffers.setText("Check your offers");
+        jBttnCheckOffers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBttnCheckOffersActionPerformed(evt);
+            }
+        });
+
+        jBttnLogOut.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        jBttnLogOut.setText("Log Out");
+        jBttnLogOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBttnLogOutActionPerformed(evt);
+            }
+        });
+
+        jBttnCheckHistory.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        jBttnCheckHistory.setText("Check ownership history");
+        jBttnCheckHistory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBttnCheckHistoryActionPerformed(evt);
+            }
+        });
 
         jTblRealEstates.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -69,10 +124,11 @@ public class FBuyer extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(jTblRealEstates);
 
-        jBttnBuy.setText("Buy");
-        jBttnBuy.addActionListener(new java.awt.event.ActionListener() {
+        jBttnBack.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        jBttnBack.setText("Back");
+        jBttnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBttnBuyActionPerformed(evt);
+                jBttnBackActionPerformed(evt);
             }
         });
 
@@ -81,68 +137,105 @@ public class FBuyer extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jBttnBuy, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(316, 316, 316)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jBttnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(86, 86, 86)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(224, 224, 224)
+                                        .addComponent(jBttnCheckHistory, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jBttnBuy, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(94, 94, 94)
+                                        .addComponent(jBttnCheckOffers, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(73, 73, 73)
+                                .addComponent(jBttnLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(51, 51, 51)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 696, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 53, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jBttnBuy))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(28, 28, 28)
+                        .addComponent(jLabel2))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jBttnBack)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jBttnCheckOffers)
+                    .addComponent(jBttnBuy)
+                    .addComponent(jBttnLogOut))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jBttnCheckHistory)
+                .addContainerGap(59, Short.MAX_VALUE))
         );
-
-        jBttnCheckOffers.setText("Check your offers");
-        jBttnCheckOffers.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBttnCheckOffersActionPerformed(evt);
-            }
-        });
-
-        jBttnCheckHistory.setText("Check ownership history");
-        jBttnCheckHistory.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBttnCheckHistoryActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jBttnCheckHistory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(351, 351, 351)
-                        .addComponent(jBttnCheckOffers, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 810, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBttnCheckOffers)
-                    .addComponent(jBttnCheckHistory))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jBttnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnLogOutActionPerformed
+        // TODO add your handling code here:
+        FLogin fLogin = new FLogin();
+        fLogin.setVisible(true);
+        currentUser = null;
+
+        this.dispose();
+    }//GEN-LAST:event_jBttnLogOutActionPerformed
+
+    private void jBttnCheckHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnCheckHistoryActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = jTblRealEstates.getSelectedRow();
+        String ownerAddress = (String) jTblRealEstates.getValueAt(selectedRow, 0);
+        String reAddress = (String) jTblRealEstates.getValueAt(selectedRow, 1);
+
+        int id = -1;
+        try {
+            id = contracts.getIdByOwnerAndLocation(currentUser, ownerAddress, reAddress);
+        } catch (Exception ex) {
+            Logger.getLogger(FBuyer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        if (selectedRow >= 0) {
+
+            FOwnershipHistory fOwnershipHistory = new FOwnershipHistory(currentUser, id);
+            fOwnershipHistory.setVisible(true);
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Please select real estate!");
+        }
+    }//GEN-LAST:event_jBttnCheckHistoryActionPerformed
+
+    private void jBttnCheckOffersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnCheckOffersActionPerformed
+        // TODO add your handling code here:
+        JFrame fCBO = new FCheckBuyerOffers(currentUser);
+        fCBO.setVisible(true);
+    }//GEN-LAST:event_jBttnCheckOffersActionPerformed
 
     private void jBttnBuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnBuyActionPerformed
         // TODO add your handling code here:
@@ -154,7 +247,14 @@ public class FBuyer extends javax.swing.JFrame {
             int distance = (int) jTblRealEstates.getValueAt(selectedRow, 3);
             int price = (int) jTblRealEstates.getValueAt(selectedRow, 4);
 
-            RealEstate realEstate = new RealEstate(selectedRow + 1, ownerAddress, reAddress, area, distance, price);
+            int id = -1;
+            try {
+                id = contracts.getIdByOwnerAndLocation(currentUser, ownerAddress, reAddress);
+            } catch (Exception ex) {
+                Logger.getLogger(FBuyer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            RealEstate realEstate = new RealEstate(id, ownerAddress, reAddress, area, distance, price);
 
             JFrame fSetOffer = new FSetOffer(currentUser, realEstate);
             fSetOffer.setVisible(true);
@@ -164,33 +264,33 @@ public class FBuyer extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jBttnBuyActionPerformed
 
-    private void jBttnCheckOffersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnCheckOffersActionPerformed
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         // TODO add your handling code here:
-        JFrame fCBO = new FCheckBuyerOffers(currentUser);
-        fCBO.setVisible(true);
-    }//GEN-LAST:event_jBttnCheckOffersActionPerformed
+    }//GEN-LAST:event_formWindowClosed
 
-    private void jBttnCheckHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnCheckHistoryActionPerformed
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
-        int selectedRow = jTblRealEstates.getSelectedRow();
-        if (selectedRow >= 0) {
-            
-            FOwnershipHistory fOwnershipHistory = new FOwnershipHistory(currentUser, selectedRow);
-            fOwnershipHistory.setVisible(true);
-            
-        } else {
-            JOptionPane.showMessageDialog(null, "Please select real estate!");
-        }
-    }//GEN-LAST:event_jBttnCheckHistoryActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_formWindowClosing
+
+    private void jBttnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnBackActionPerformed
+        // TODO add your handling code here:
+        FAllRealEstates fAllRealEstates = new FAllRealEstates(currentUser);
+        fAllRealEstates.setVisible(true);
+        
+        dispose();
+    }//GEN-LAST:event_jBttnBackActionPerformed
 
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jBttnBack;
     private javax.swing.JButton jBttnBuy;
     private javax.swing.JButton jBttnCheckHistory;
     private javax.swing.JButton jBttnCheckOffers;
+    private javax.swing.JButton jBttnLogOut;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -200,8 +300,6 @@ public class FBuyer extends javax.swing.JFrame {
     private void centerForm() {
         setLocationRelativeTo(null);
     }
-
-    Controller controller = new Controller();
 
     private void populateTableRealEstates(User user) {
         try {
@@ -225,14 +323,17 @@ public class FBuyer extends javax.swing.JFrame {
 
         int index;
         for (int i = 0; i < realEstates.size(); i++) {
-            index = -1;
-            for (int j = i + 1; j < realEstates.size(); j++) {
-                if (realEstates.get(i).getRealEstateAddress().equals(realEstates.get(j).getRealEstateAddress())) {
-                    index = i;
+            if (!realEstates.get(i).getOwnerAddress().equals(currentUser.getAddress())) {
+
+                index = -1;
+                for (int j = i + 1; j < realEstates.size(); j++) {
+                    if (realEstates.get(i).getRealEstateAddress().equals(realEstates.get(j).getRealEstateAddress())) {
+                        index = i;
+                    }
                 }
-            }
-            if (index == -1) {
-                filtered.add(realEstates.get(i));
+                if (index == -1) {
+                    filtered.add(realEstates.get(i));
+                }
             }
         }
 
