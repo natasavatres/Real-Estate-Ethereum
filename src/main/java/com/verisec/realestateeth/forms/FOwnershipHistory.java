@@ -74,6 +74,7 @@ public class FOwnershipHistory extends javax.swing.JFrame {
         jTblOwnershipHistory.setEnabled(false);
         jScrollPane1.setViewportView(jTblOwnershipHistory);
 
+        jBttnBack.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         jBttnBack.setText("Back");
         jBttnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -102,7 +103,7 @@ public class FOwnershipHistory extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jBttnBack)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         pack();

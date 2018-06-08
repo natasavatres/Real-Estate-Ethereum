@@ -80,14 +80,14 @@ public class Contracts {
         contractBS.setRealEstate(BigInteger.valueOf(2), "0x3590aca93338b0721966a8d0c96ebf2c4c87c544", "Marka Celebonovica 27", BigInteger.valueOf(45), BigInteger.valueOf(10), BigInteger.valueOf(300)).send();
     }
 
-    protected List<RealEstate> createRealEstatesList(BuyingSelling contract) throws Exception {
+    protected List<RealEstate> createRealEstatesList(BuyingSellingWrapper buyingSellingWrapper) throws Exception {
 
         List<RealEstate> result = new ArrayList<>();
-        List<BigInteger> realEstateIDs = (List<BigInteger>) contract.getAllRealEstates().send();
+        List<BigInteger> realEstateIDs = buyingSellingWrapper.getAllRealEstatesWrapper();
         Tuple6<BigInteger, String, String, BigInteger, BigInteger, BigInteger> returnVal;
 
         for (BigInteger realEstateID : realEstateIDs) {
-            returnVal = contract.getRealEstate(realEstateID).send();
+            returnVal = buyingSellingWrapper.getRealEstateWrapper(realEstateID);
             BigInteger idRE = returnVal.getValue1();
             String ownerAddr = returnVal.getValue2();
             String reAddr = returnVal.getValue3();
@@ -112,7 +112,8 @@ public class Contracts {
 
         contractBS = BuyingSelling.load(adminContractAddress, web3, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386));
 
-        return createRealEstatesList(contractBS);
+        BuyingSellingWrapper buyingSellingWrapper = new BuyingSellingWrapper(contractBS);
+        return createRealEstatesList(buyingSellingWrapper);
 
     }
 
@@ -128,7 +129,9 @@ public class Contracts {
 
         contractBS = BuyingSelling.load(adminContractAddress, web3, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386));
 
-        List<RealEstate> allRealEstates = createRealEstatesList(contractBS);
+        BuyingSellingWrapper buyingSellingWrapper = new BuyingSellingWrapper(contractBS);
+
+        List<RealEstate> allRealEstates = createRealEstatesList(buyingSellingWrapper);
         for (RealEstate realEstate : allRealEstates) {
             if (realEstate.getOwnerAddress().equals(seller.getAddress())) {
                 realEstates.add(realEstate);
@@ -241,7 +244,7 @@ public class Contracts {
     }
 
     public void payRealEstate(Offer offer, User buyer) throws Exception {
-        
+
         Web3j web3 = createWeb3j();
         String buyerPK = controller.getPrivateKey(buyer.getUsername());
         Credentials credentials = Credentials.create(buyerPK);
@@ -297,7 +300,7 @@ public class Contracts {
     }
 
     public int getIdByOwnerAndLocation(User buyer, String ownerAddress, String reAddress) throws Exception {
-        
+
         Web3j web3 = createWeb3j();
         String buyerPK = controller.getPrivateKey(buyer.getUsername());
         Credentials credentials = Credentials.create(buyerPK);
@@ -307,10 +310,11 @@ public class Contracts {
 
         contractBS = BuyingSelling.load(adminContractAddress, web3, credentials, GAS_PRICE, GAS_LIMIT);
 
-        List<RealEstate> realEstates = createRealEstatesList(contractBS);
-        
+        BuyingSellingWrapper buyingSellingWrapper = new BuyingSellingWrapper(contractBS);
+        List<RealEstate> realEstates = createRealEstatesList(buyingSellingWrapper);
+
         for (RealEstate re : realEstates) {
-            if(re.getOwnerAddress().equals(ownerAddress) && re.getRealEstateAddress().equals(reAddress)){
+            if (re.getOwnerAddress().equals(ownerAddress) && re.getRealEstateAddress().equals(reAddress)) {
                 return re.getId();
             }
         }

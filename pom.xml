@@ -87,17 +87,10 @@
             <type>jar</type>
         </dependency>
         <dependency>
-<<<<<<< HEAD
         <groupId>org.mockito</groupId>
         <artifactId>mockito-core</artifactId>
         <version>2.18.3</version>
     </dependency>
-=======
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>2.18.3</version>
-        </dependency>
->>>>>>> 68743e5a5ae9754b2db7ac6f946ab1af9fda7332
     </dependencies>
     
 </project>

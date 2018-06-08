@@ -44,6 +44,9 @@ public class FAdmin extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jLblMessage.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
+
+        jBttnAddRealEstate.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         jBttnAddRealEstate.setText("Add real estate");
         jBttnAddRealEstate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -51,6 +54,7 @@ public class FAdmin extends javax.swing.JFrame {
             }
         });
 
+        jBttnLogOut.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         jBttnLogOut.setText("Log Out");
         jBttnLogOut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -58,6 +62,7 @@ public class FAdmin extends javax.swing.JFrame {
             }
         });
 
+        jBttnStart.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         jBttnStart.setText("Start application");
         jBttnStart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -87,7 +92,7 @@ public class FAdmin extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(29, Short.MAX_VALUE)
+                .addContainerGap(25, Short.MAX_VALUE)
                 .addComponent(jBttnStart)
                 .addGap(18, 18, 18)
                 .addComponent(jLblMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
