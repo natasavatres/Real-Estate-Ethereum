@@ -9,7 +9,6 @@ import com.verisec.realestateeth.controller.Controller;
 import com.verisec.realestateeth.domain.Offer;
 import com.verisec.realestateeth.domain.User;
 import com.verisec.realestateeth.table.model.BuyerOffersTableModel;
-import com.verisec.realestateeth.table.model.OfferTableModel;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
@@ -131,6 +130,9 @@ public class FCheckBuyerOffers extends javax.swing.JFrame {
 
     private void jBttnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnBackActionPerformed
         // TODO add your handling code here:
+        FBuyer fBuyer = new FBuyer(currentUser);
+        fBuyer.setVisible(true);
+        
         this.dispose();
     }//GEN-LAST:event_jBttnBackActionPerformed
 

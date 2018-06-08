@@ -66,6 +66,13 @@ public class FBuyer extends javax.swing.JFrame {
         setMaximumSize(null);
         setResizable(false);
         setSize(new java.awt.Dimension(810, 410));
+        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+                formWindowGainedFocus(evt);
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+            }
+        });
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
@@ -237,6 +244,8 @@ public class FBuyer extends javax.swing.JFrame {
         // TODO add your handling code here:
         JFrame fCBO = new FCheckBuyerOffers(currentUser);
         fCBO.setVisible(true);
+        
+        dispose();
     }//GEN-LAST:event_jBttnCheckOffersActionPerformed
 
     private void jBttnBuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnBuyActionPerformed
@@ -288,6 +297,12 @@ public class FBuyer extends javax.swing.JFrame {
         RealEstateTableModel retm = (RealEstateTableModel) jTblRealEstatesBuyer.getModel();
         retm.refreshTable();
     }//GEN-LAST:event_formWindowActivated
+
+    private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
+        // TODO add your handling code here:
+        RealEstateTableModel retm = (RealEstateTableModel) jTblRealEstatesBuyer.getModel();
+        retm.refreshTable();
+    }//GEN-LAST:event_formWindowGainedFocus
 
     /**
      * @param args the command line arguments

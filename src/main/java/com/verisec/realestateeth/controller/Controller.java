@@ -11,15 +11,8 @@ import com.verisec.realestateeth.domain.BuyingSelling;
 import com.verisec.realestateeth.domain.Contracts;
 import com.verisec.realestateeth.domain.Offer;
 import com.verisec.realestateeth.domain.RealEstate;
-import com.verisec.realestateeth.domain.TransferingFunds;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
-import org.web3j.crypto.Credentials;
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.RemoteCall;
-import org.web3j.protocol.http.HttpService;
-import org.web3j.tuples.generated.Tuple6;
 
 /**
  *
