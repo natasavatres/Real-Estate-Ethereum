@@ -40,7 +40,7 @@ public class Contracts {
 
     public void createBuyerContract(User buyer, RealEstate realEstate, BigInteger offer) throws Exception {
 
-       Web3j web3 = createWeb3j();
+        Web3j web3 = createWeb3j();
 
         EthGetBalance ethGetBalance3 = web3.ethGetBalance(buyer.getAddress(), DefaultBlockParameterName.LATEST).sendAsync().get();
         BigInteger balance3 = ethGetBalance3.getBalance();
@@ -80,11 +80,31 @@ public class Contracts {
         contractBS.setRealEstate(BigInteger.valueOf(2), "0x3590aca93338b0721966a8d0c96ebf2c4c87c544", "Marka Celebonovica 27", BigInteger.valueOf(45), BigInteger.valueOf(10), BigInteger.valueOf(300)).send();
     }
 
+    private List<RealEstate> createRealEstatesList(BuyingSelling contract) throws Exception {
+
+        List<RealEstate> result = new ArrayList<>();
+
+        List<BigInteger> realEstateIDs = (List<BigInteger>) contract.getAllRealEstates().send();
+        Tuple6<BigInteger, String, String, BigInteger, BigInteger, BigInteger> returnVal;
+
+        for (BigInteger realEstateID : realEstateIDs) {
+            returnVal = contractBS.getRealEstate(realEstateID).send();
+            BigInteger idRE = returnVal.getValue1();
+            String ownerAddr = returnVal.getValue2();
+            String reAddr = returnVal.getValue3();
+            BigInteger area = returnVal.getValue4();
+            BigInteger dist = returnVal.getValue5();
+            BigInteger price = returnVal.getValue6();
+
+            result.add(new RealEstate(idRE.intValue(), ownerAddr, reAddr, area.intValue(), dist.intValue(), price.intValue()));
+        }
+
+        return result;
+    }
+
     public List<RealEstate> getAllRealEstates(User buyer) throws Exception {
-        List<RealEstate> realEstates = new ArrayList<>();
 
         Web3j web3 = createWeb3j();
-
         DatabaseRepository dbr = new DatabaseRepository();
         String adminContractAddress = dbr.getContractAddress("000", "000");
 
@@ -93,30 +113,14 @@ public class Contracts {
 
         contractBS = BuyingSelling.load(adminContractAddress, web3, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386));
 
-        List<BigInteger> realEstateIDs = (List<BigInteger>) contractBS.getAllRealEstates().send();
+        return createRealEstatesList(contractBS);
 
-        Tuple6<BigInteger, String, String, BigInteger, BigInteger, BigInteger> returnVal;
-
-        for (BigInteger realEstateID : realEstateIDs) {
-            returnVal = contractBS.getRealEstate(realEstateID).send();
-            BigInteger idRE = returnVal.getValue1();
-            String ownerAddr = returnVal.getValue2();
-            String reAddr = returnVal.getValue3();
-            BigInteger area = returnVal.getValue4();
-            BigInteger dist = returnVal.getValue5();
-            BigInteger price = returnVal.getValue6();
-
-            realEstates.add(new RealEstate(idRE.intValue(), ownerAddr, reAddr, area.intValue(), dist.intValue(), price.intValue()));
-        }
-
-        return realEstates;
     }
 
     public List<RealEstate> getAllRealEstatesFromSeller(User seller) throws Exception {
         List<RealEstate> realEstates = new ArrayList<>();
 
         Web3j web3 = createWeb3j();
-
         DatabaseRepository dbr = new DatabaseRepository();
         String adminContractAddress = dbr.getContractAddress("000", "000");
 
@@ -125,21 +129,10 @@ public class Contracts {
 
         contractBS = BuyingSelling.load(adminContractAddress, web3, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386));
 
-        List<BigInteger> realEstateIDs = (List<BigInteger>) contractBS.getAllRealEstates().send();
-
-        Tuple6<BigInteger, String, String, BigInteger, BigInteger, BigInteger> returnVal;
-
-        for (BigInteger realEstateID : realEstateIDs) {
-            returnVal = contractBS.getRealEstate(realEstateID).send();
-            BigInteger idRE = returnVal.getValue1();
-            String ownerAddr = returnVal.getValue2();
-            String reAddr = returnVal.getValue3();
-            BigInteger area = returnVal.getValue4();
-            BigInteger dist = returnVal.getValue5();
-            BigInteger price = returnVal.getValue6();
-
-            if (ownerAddr.equals(seller.getAddress())) {
-                realEstates.add(new RealEstate(idRE.intValue(), ownerAddr, reAddr, area.intValue(), dist.intValue(), price.intValue()));
+        List<RealEstate> allRealEstates = createRealEstatesList(contractBS);
+        for (RealEstate realEstate : allRealEstates) {
+            if (realEstate.getOwnerAddress().equals(seller.getAddress())) {
+                realEstates.add(realEstate);
             }
         }
 
@@ -208,6 +201,19 @@ public class Contracts {
         contractTF.setState("OfferDeclined").send();
     }
 
+    private RealEstate createRealEstateEntity(BuyingSelling contract, int idRealEstate) throws Exception {
+        Tuple6<BigInteger, String, String, BigInteger, BigInteger, BigInteger> returnVal = contract.getRealEstate(BigInteger.valueOf(idRealEstate)).send();
+
+        BigInteger idRE = returnVal.getValue1();
+        String ownerAddr = returnVal.getValue2();
+        String reAddr = returnVal.getValue3();
+        BigInteger area = returnVal.getValue4();
+        BigInteger dist = returnVal.getValue5();
+        BigInteger price = returnVal.getValue6();
+
+        return new RealEstate(idRE.intValue(), ownerAddr, reAddr, area.intValue(), dist.intValue(), price.intValue());
+    }
+
     public List<Offer> getAllBuyerOffers(User buyer) throws Exception {
         List<Offer> offerList = new ArrayList<>();
 
@@ -228,16 +234,7 @@ public class Contracts {
             BigInteger offeredPrice = contractTF.getOffer().send();
             String offerState = contractTF.getState().send();
 
-            Tuple6<BigInteger, String, String, BigInteger, BigInteger, BigInteger> returnVal = contractBS.getRealEstate(BigInteger.valueOf(buyerContract.getIdRealEstate())).send();
-            BigInteger idRE = returnVal.getValue1();
-            String ownerAddr = returnVal.getValue2();
-            String reAddr = returnVal.getValue3();
-            BigInteger area = returnVal.getValue4();
-            BigInteger dist = returnVal.getValue5();
-            BigInteger price = returnVal.getValue6();
-
-            RealEstate re = new RealEstate(idRE.intValue(), ownerAddr, reAddr, area.intValue(), dist.intValue(), price.intValue());
-
+            RealEstate re = createRealEstateEntity(contractBS, buyerContract.getIdRealEstate());
             offerList.add(new Offer(re, offeredPrice, buyerContract.getAddressContract(), offerState));
         }
 
@@ -245,8 +242,8 @@ public class Contracts {
     }
 
     public void payRealEstate(Offer offer, User buyer) throws Exception {
+        
         Web3j web3 = createWeb3j();
-
         String buyerPK = controller.getPrivateKey(buyer.getUsername());
         Credentials credentials = Credentials.create(buyerPK);
 
@@ -301,8 +298,8 @@ public class Contracts {
     }
 
     public int getIdByOwnerAndLocation(User buyer, String ownerAddress, String reAddress) throws Exception {
+        
         Web3j web3 = createWeb3j();
-
         String buyerPK = controller.getPrivateKey(buyer.getUsername());
         Credentials credentials = Credentials.create(buyerPK);
 
@@ -311,21 +308,11 @@ public class Contracts {
 
         contractBS = BuyingSelling.load(adminContractAddress, web3, credentials, GAS_PRICE, GAS_LIMIT);
 
-        List<BigInteger> realEstateIDs = (List<BigInteger>) contractBS.getAllRealEstates().send();
-
-        Tuple6<BigInteger, String, String, BigInteger, BigInteger, BigInteger> returnVal;
-
-        for (BigInteger realEstateID : realEstateIDs) {
-            returnVal = contractBS.getRealEstate(realEstateID).send();
-            BigInteger idRE = returnVal.getValue1();
-            String ownerAddr = returnVal.getValue2();
-            String reAddr = returnVal.getValue3();
-            BigInteger area = returnVal.getValue4();
-            BigInteger dist = returnVal.getValue5();
-            BigInteger price = returnVal.getValue6();
-
-            if (ownerAddr.equals(ownerAddress) && reAddr.equals(reAddress)) {
-                return idRE.intValue();
+        List<RealEstate> realEstates = createRealEstatesList(contractBS);
+        
+        for (RealEstate re : realEstates) {
+            if(re.getOwnerAddress().equals(ownerAddress) && re.getRealEstateAddress().equals(reAddress)){
+                return re.getId();
             }
         }
 
