@@ -10,8 +10,6 @@ import com.verisec.realestateeth.db.DatabaseRepository;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
@@ -42,8 +40,7 @@ public class Contracts {
 
     public void createBuyerContract(User buyer, RealEstate realEstate, BigInteger offer) throws Exception {
 
-        HttpService httpService = new HttpService("http://localhost:8545");
-        Web3j web3 = Web3j.build(httpService);
+       Web3j web3 = createWeb3j();
 
         EthGetBalance ethGetBalance3 = web3.ethGetBalance(buyer.getAddress(), DefaultBlockParameterName.LATEST).sendAsync().get();
         BigInteger balance3 = ethGetBalance3.getBalance();
@@ -64,32 +61,15 @@ public class Contracts {
 
     }
 
-    public void sellerContract(String sellerAddress) {
-        try {
-            HttpService httpService = new HttpService("http://localhost:8546");
-            Web3j web3 = Web3j.build(httpService);
-
-            EthGetBalance ethGetBalance3 = web3.ethGetBalance(sellerAddress, DefaultBlockParameterName.LATEST).sendAsync().get();
-            BigInteger balance3 = ethGetBalance3.getBalance();
-
-            logger.info("Seller account balance is " + balance3);
-
-//            String privateKey = controller.getPrivateKey("admin");
-            Credentials credentials = Credentials.create("bc5b578e0dcb2dbf98dd6e5fe62cb5a28b84a55e15fc112d4ca88e1f62bd7c35");
-
-            contractBS = BuyingSelling.load(contractBS.getContractAddress(), web3, credentials, GAS_PRICE, GAS_LIMIT);
-
-//            logger.info("Buyer's offer: " + contract.getOffer());
-//            contract.agree();
-        } catch (Exception ex) {
-            Logger.getLogger(Contracts.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    private Web3j createWeb3j() {
+        HttpService httpService = new HttpService("http://localhost:8545");
+        Web3j web3 = Web3j.build(httpService);
+        return web3;
     }
 
     public void createAdminContract() throws Exception {
-        HttpService httpService = new HttpService("http://localhost:8546");
-        Web3j web3 = Web3j.build(httpService);
 
+        Web3j web3 = createWeb3j();
         String adminPK = controller.getPrivateKey("admin");
         Credentials credentials = Credentials.create(adminPK);
         contractBS = BuyingSelling.deploy(web3, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386)).send();
@@ -103,8 +83,7 @@ public class Contracts {
     public List<RealEstate> getAllRealEstates(User buyer) throws Exception {
         List<RealEstate> realEstates = new ArrayList<>();
 
-        HttpService httpService = new HttpService("http://localhost:8545");
-        Web3j web3j = Web3j.build(httpService);
+        Web3j web3 = createWeb3j();
 
         DatabaseRepository dbr = new DatabaseRepository();
         String adminContractAddress = dbr.getContractAddress("000", "000");
@@ -112,7 +91,7 @@ public class Contracts {
         String buyerPK = controller.getPrivateKey(buyer.getUsername());
         Credentials credentials = Credentials.create(buyerPK);
 
-        contractBS = BuyingSelling.load(adminContractAddress, web3j, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386));
+        contractBS = BuyingSelling.load(adminContractAddress, web3, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386));
 
         List<BigInteger> realEstateIDs = (List<BigInteger>) contractBS.getAllRealEstates().send();
 
@@ -136,8 +115,7 @@ public class Contracts {
     public List<RealEstate> getAllRealEstatesFromSeller(User seller) throws Exception {
         List<RealEstate> realEstates = new ArrayList<>();
 
-        HttpService httpService = new HttpService("http://localhost:8546");
-        Web3j web3j = Web3j.build(httpService);
+        Web3j web3 = createWeb3j();
 
         DatabaseRepository dbr = new DatabaseRepository();
         String adminContractAddress = dbr.getContractAddress("000", "000");
@@ -145,7 +123,7 @@ public class Contracts {
         String sellerPK = controller.getPrivateKey(seller.getUsername());
         Credentials credentials = Credentials.create(sellerPK);
 
-        contractBS = BuyingSelling.load(adminContractAddress, web3j, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386));
+        contractBS = BuyingSelling.load(adminContractAddress, web3, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386));
 
         List<BigInteger> realEstateIDs = (List<BigInteger>) contractBS.getAllRealEstates().send();
 
@@ -173,8 +151,7 @@ public class Contracts {
 
         List<Offer> offerList = new ArrayList<>();
 
-        HttpService httpService = new HttpService("http://localhost:8546");
-        Web3j web3j = Web3j.build(httpService);
+        Web3j web3 = createWeb3j();
 
         DatabaseRepository dbr = new DatabaseRepository();
         String adminContractAddress = dbr.getContractAddress("000", "000");
@@ -191,7 +168,7 @@ public class Contracts {
             for (int j = 0; j < contractEntityList.size(); j++) {
                 if (realEstatesFromSeller.get(i).getId() == contractEntityList.get(j).getIdRealEstate()) {
                     String contractAddress = contractEntityList.get(j).getAddressContract();
-                    contractTF = TransferingFunds.load(contractAddress, web3j, credentials, GAS_PRICE, GAS_LIMIT);
+                    contractTF = TransferingFunds.load(contractAddress, web3, credentials, GAS_PRICE, GAS_LIMIT);
 
                     offerState = contractTF.getState().send();
                     System.out.println(offerState);
@@ -209,26 +186,23 @@ public class Contracts {
     }
 
     public void acceptOffer(String contractAddress, User seller) throws Exception {
-        HttpService httpService = new HttpService("http://localhost:8546");
-        Web3j web3j = Web3j.build(httpService);
+        Web3j web3 = createWeb3j();
 
         String sellerPK = controller.getPrivateKey(seller.getUsername());
         Credentials credentials = Credentials.create(sellerPK);
 
-        contractTF = TransferingFunds.load(contractAddress, web3j, credentials, GAS_PRICE, GAS_LIMIT);
+        contractTF = TransferingFunds.load(contractAddress, web3, credentials, GAS_PRICE, GAS_LIMIT);
 
         contractTF.accept().send();
         contractTF.setState("OfferAccepted").send();
     }
 
     public void declineOffer(String contractAddress, User seller) throws Exception {
-        HttpService httpService = new HttpService("http://localhost:8546");
-        Web3j web3j = Web3j.build(httpService);
-
+        Web3j web3 = createWeb3j();
         String sellerPK = controller.getPrivateKey(seller.getUsername());
         Credentials credentials = Credentials.create(sellerPK);
 
-        contractTF = TransferingFunds.load(contractAddress, web3j, credentials, GAS_PRICE, GAS_LIMIT);
+        contractTF = TransferingFunds.load(contractAddress, web3, credentials, GAS_PRICE, GAS_LIMIT);
 
         contractTF.decline().send();
         contractTF.setState("OfferDeclined").send();
@@ -237,8 +211,7 @@ public class Contracts {
     public List<Offer> getAllBuyerOffers(User buyer) throws Exception {
         List<Offer> offerList = new ArrayList<>();
 
-        HttpService httpService = new HttpService("http://localhost:8545");
-        Web3j web3j = Web3j.build(httpService);
+        Web3j web3 = createWeb3j();
 
         DatabaseRepository dbr = new DatabaseRepository();
         String adminContractAddress = dbr.getContractAddress("000", "000");
@@ -248,10 +221,10 @@ public class Contracts {
 
         List<ContractEntity> buyerContracts = databaseRepository.getAllBuyerContracts(buyer);
 
-        contractBS = BuyingSelling.load(adminContractAddress, web3j, credentials, GAS_PRICE, GAS_LIMIT);
+        contractBS = BuyingSelling.load(adminContractAddress, web3, credentials, GAS_PRICE, GAS_LIMIT);
 
         for (ContractEntity buyerContract : buyerContracts) {
-            contractTF = TransferingFunds.load(buyerContract.getAddressContract(), web3j, credentials, GAS_PRICE, GAS_LIMIT);
+            contractTF = TransferingFunds.load(buyerContract.getAddressContract(), web3, credentials, GAS_PRICE, GAS_LIMIT);
             BigInteger offeredPrice = contractTF.getOffer().send();
             String offerState = contractTF.getState().send();
 
@@ -272,19 +245,18 @@ public class Contracts {
     }
 
     public void payRealEstate(Offer offer, User buyer) throws Exception {
-        HttpService httpService = new HttpService("http://localhost:8545");
-        Web3j web3j = Web3j.build(httpService);
+        Web3j web3 = createWeb3j();
 
         String buyerPK = controller.getPrivateKey(buyer.getUsername());
         Credentials credentials = Credentials.create(buyerPK);
 
         DatabaseRepository dbr = new DatabaseRepository();
         String adminContractAddress = dbr.getContractAddress("000", "000");
-        contractBS = BuyingSelling.load(adminContractAddress, web3j, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386));
+        contractBS = BuyingSelling.load(adminContractAddress, web3, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386));
 
         List<BigInteger> realEstateIDs = (List<BigInteger>) contractBS.getAllRealEstates().send();
         int listSize = realEstateIDs.size();
-        contractTF = TransferingFunds.load(offer.getContractAddress(), web3j, credentials, GAS_PRICE, GAS_LIMIT);
+        contractTF = TransferingFunds.load(offer.getContractAddress(), web3, credentials, GAS_PRICE, GAS_LIMIT);
 
         contractTF.changeOwner(BigInteger.valueOf(listSize + 1),
                 offer.getRealEstate().getRealEstateAddress(),
@@ -297,15 +269,14 @@ public class Contracts {
     }
 
     public int getIdForNewRealEstate(User admin) throws Exception {
-        HttpService httpService = new HttpService("http://localhost:8546");
-        Web3j web3j = Web3j.build(httpService);
+        Web3j web3 = createWeb3j();
 
         String adminPK = controller.getPrivateKey(admin.getUsername());
         Credentials credentials = Credentials.create(adminPK);
 
         DatabaseRepository dbr = new DatabaseRepository();
         String adminContractAddress = dbr.getContractAddress("000", "000");
-        contractBS = BuyingSelling.load(adminContractAddress, web3j, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386));
+        contractBS = BuyingSelling.load(adminContractAddress, web3, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386));
 
         List<BigInteger> realEstateIDs = (List<BigInteger>) contractBS.getAllRealEstates().send();
 
@@ -313,8 +284,7 @@ public class Contracts {
     }
 
     public void addRealEstate(RealEstate re) throws Exception {
-        HttpService httpService = new HttpService("http://localhost:8546");
-        Web3j web3 = Web3j.build(httpService);
+        Web3j web3 = createWeb3j();
 
         String adminPK = controller.getPrivateKey("admin");
         Credentials credentials = Credentials.create(adminPK);
@@ -331,8 +301,7 @@ public class Contracts {
     }
 
     public int getIdByOwnerAndLocation(User buyer, String ownerAddress, String reAddress) throws Exception {
-        HttpService httpService = new HttpService("http://localhost:8546");
-        Web3j web3 = Web3j.build(httpService);
+        Web3j web3 = createWeb3j();
 
         String buyerPK = controller.getPrivateKey(buyer.getUsername());
         Credentials credentials = Credentials.create(buyerPK);
@@ -341,7 +310,7 @@ public class Contracts {
         String adminContractAddress = dbr.getContractAddress("000", "000");
 
         contractBS = BuyingSelling.load(adminContractAddress, web3, credentials, GAS_PRICE, GAS_LIMIT);
-        
+
         List<BigInteger> realEstateIDs = (List<BigInteger>) contractBS.getAllRealEstates().send();
 
         Tuple6<BigInteger, String, String, BigInteger, BigInteger, BigInteger> returnVal;
