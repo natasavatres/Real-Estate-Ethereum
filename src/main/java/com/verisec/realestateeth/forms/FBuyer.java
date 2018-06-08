@@ -340,7 +340,7 @@ public class FBuyer extends javax.swing.JFrame {
         }
     }
 
-    public List<RealEstate> filterListForBuyerView(List<RealEstate> realEstates) {
+    protected List<RealEstate> filterListForBuyerView(List<RealEstate> realEstates) {
 
         List<RealEstate> filtered = new ArrayList<>();
 

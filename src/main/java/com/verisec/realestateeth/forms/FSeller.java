@@ -196,7 +196,7 @@ public class FSeller extends javax.swing.JFrame {
         jTblRealEstatesSeller.disable();
     }
 
-    public List<RealEstate> filterListForSellerView(List<RealEstate> realEstates) {
+    protected List<RealEstate> filterListForSellerView(List<RealEstate> realEstates) {
         List<RealEstate> filtered = new ArrayList<>();
 
         int index;

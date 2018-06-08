@@ -83,7 +83,6 @@ public class Contracts {
     private List<RealEstate> createRealEstatesList(BuyingSelling contract) throws Exception {
 
         List<RealEstate> result = new ArrayList<>();
-
         List<BigInteger> realEstateIDs = (List<BigInteger>) contract.getAllRealEstates().send();
         Tuple6<BigInteger, String, String, BigInteger, BigInteger, BigInteger> returnVal;
 

@@ -12,8 +12,6 @@ import com.verisec.realestateeth.domain.User;
 import com.verisec.realestateeth.table.model.RealEstateTableModel;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 
@@ -271,7 +269,7 @@ public class FAllRealEstates extends javax.swing.JFrame {
         }
     }
 
-    public List<RealEstate> filterListForAllRealEstates(List<RealEstate> realEstates) {
+    protected List<RealEstate> filterListForAllRealEstates(List<RealEstate> realEstates) {
         List<RealEstate> filtered = new ArrayList<>();
 
         int index;

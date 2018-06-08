@@ -37,7 +37,7 @@ public class FAllRealEstatesTest {
 
         List<RealEstate> actual = fAllRealEstates.filterListForAllRealEstates(realEstates);
 
-        Assert.assertEquals(actual, expected);
+        Assert.assertEquals(expected, actual );
     }
 
     @Test(expected = Exception.class)
@@ -54,7 +54,7 @@ public class FAllRealEstatesTest {
 
         List<RealEstate> actual = fAllRealEstates.filterListForAllRealEstates(realEstates);
 
-        Assert.assertEquals(actual, expected);
+        Assert.assertEquals(expected, actual);
     }
 
 }

@@ -36,7 +36,7 @@ public class FBuyerTest {
     
     List <RealEstate> actual = fBuyer.filterListForBuyerView(realEstates);
     
-    Assert.assertEquals(actual,expected);
+    Assert.assertEquals(expected, actual);
     
     }   
     
@@ -47,7 +47,7 @@ public class FBuyerTest {
     
     List <RealEstate> actual = fBuyer.filterListForBuyerView(realEstates);
     
-    Assert.assertEquals(actual,expected);
+    Assert.assertEquals(expected, actual);
     
     }
     

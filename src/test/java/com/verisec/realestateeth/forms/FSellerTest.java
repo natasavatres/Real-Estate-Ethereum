@@ -34,7 +34,7 @@ public class FSellerTest {
     
     List <RealEstate> actual = fSeller.filterListForSellerView(realEstates);
     
-    Assert.assertEquals(actual,expected);
+    Assert.assertEquals(expected, actual);
     }
     
     @Test
@@ -44,7 +44,7 @@ public class FSellerTest {
     
     List <RealEstate> actual = fSeller.filterListForSellerView(realEstates);
     
-    Assert.assertEquals(actual,expected);
+    Assert.assertEquals(expected, actual);
     }
     
     @Test(expected = Exception.class)
