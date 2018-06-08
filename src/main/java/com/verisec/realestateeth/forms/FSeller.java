@@ -55,6 +55,11 @@ public class FSeller extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sell real estate");
         setSize(new java.awt.Dimension(810, 410));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         jLabel1.setText("Your real estates");
@@ -154,6 +159,12 @@ public class FSeller extends javax.swing.JFrame {
 
         dispose();
     }//GEN-LAST:event_jBttnBackActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        // TODO add your handling code here:
+        RealEstateTableModel retm = (RealEstateTableModel) jTblRealEstatesSeller.getModel();
+        retm.refreshTable();
+    }//GEN-LAST:event_formWindowActivated
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

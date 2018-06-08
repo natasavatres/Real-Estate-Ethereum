@@ -37,7 +37,7 @@ public class FAllRealEstates extends javax.swing.JFrame {
         currentUser = user;
         centerForm();
         populateTableAllRealEstates();
-//        setUpRadioButtons();
+        setUpRadioButtons();
     }
 
     /**
@@ -63,6 +63,11 @@ public class FAllRealEstates extends javax.swing.JFrame {
         setTitle("All real estates");
         setPreferredSize(new java.awt.Dimension(810, 410));
         setSize(new java.awt.Dimension(810, 410));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         jLabel1.setText("All Real Estates");
@@ -224,6 +229,12 @@ public class FAllRealEstates extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jBttnNextActionPerformed
 
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        // TODO add your handling code here:
+        RealEstateTableModel retm = (RealEstateTableModel) jTblAllRealEstates.getModel();
+        retm.refreshTable();
+    }//GEN-LAST:event_formWindowActivated
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBttnLogOut;
@@ -280,8 +291,8 @@ public class FAllRealEstates extends javax.swing.JFrame {
     }
 
     private void setUpRadioButtons() {
-        jRadioBuyer.setText("buyer");
-        jRadioSeller.setText("seller");
+        jRadioBuyer.setText("Buyer");
+        jRadioSeller.setText("Seller");
 
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(jRadioBuyer);

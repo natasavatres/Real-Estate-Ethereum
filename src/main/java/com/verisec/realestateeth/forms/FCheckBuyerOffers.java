@@ -159,6 +159,7 @@ public class FCheckBuyerOffers extends javax.swing.JFrame {
 
             } catch (Exception ex) {
                 System.out.println("Error in paying for real estate");
+                JOptionPane.showMessageDialog(this, "Error in paying for real estate!");
             }
         } else {
             JOptionPane.showMessageDialog(null, "Please select offer!");

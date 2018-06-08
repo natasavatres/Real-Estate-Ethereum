@@ -58,16 +58,18 @@ public class FBuyer extends javax.swing.JFrame {
         jBttnLogOut = new javax.swing.JButton();
         jBttnCheckHistory = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTblRealEstates = new javax.swing.JTable();
+        jTblRealEstatesBuyer = new javax.swing.JTable();
         jBttnBack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Purchase real estate");
         setMaximumSize(null);
-        setPreferredSize(new java.awt.Dimension(810, 410));
         setResizable(false);
         setSize(new java.awt.Dimension(810, 410));
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
             }
@@ -114,7 +116,7 @@ public class FBuyer extends javax.swing.JFrame {
             }
         });
 
-        jTblRealEstates.setModel(new javax.swing.table.DefaultTableModel(
+        jTblRealEstatesBuyer.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -122,7 +124,7 @@ public class FBuyer extends javax.swing.JFrame {
 
             }
         ));
-        jScrollPane2.setViewportView(jTblRealEstates);
+        jScrollPane2.setViewportView(jTblRealEstatesBuyer);
 
         jBttnBack.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         jBttnBack.setText("Back");
@@ -210,9 +212,9 @@ public class FBuyer extends javax.swing.JFrame {
 
     private void jBttnCheckHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnCheckHistoryActionPerformed
         // TODO add your handling code here:
-        int selectedRow = jTblRealEstates.getSelectedRow();
-        String ownerAddress = (String) jTblRealEstates.getValueAt(selectedRow, 0);
-        String reAddress = (String) jTblRealEstates.getValueAt(selectedRow, 1);
+        int selectedRow = jTblRealEstatesBuyer.getSelectedRow();
+        String ownerAddress = (String) jTblRealEstatesBuyer.getValueAt(selectedRow, 0);
+        String reAddress = (String) jTblRealEstatesBuyer.getValueAt(selectedRow, 1);
 
         int id = -1;
         try {
@@ -239,13 +241,13 @@ public class FBuyer extends javax.swing.JFrame {
 
     private void jBttnBuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnBuyActionPerformed
         // TODO add your handling code here:
-        int selectedRow = jTblRealEstates.getSelectedRow();
+        int selectedRow = jTblRealEstatesBuyer.getSelectedRow();
         if (selectedRow >= 0) {
-            String ownerAddress = (String) jTblRealEstates.getValueAt(selectedRow, 0);
-            String reAddress = (String) jTblRealEstates.getValueAt(selectedRow, 1);
-            int area = (int) jTblRealEstates.getValueAt(selectedRow, 2);
-            int distance = (int) jTblRealEstates.getValueAt(selectedRow, 3);
-            int price = (int) jTblRealEstates.getValueAt(selectedRow, 4);
+            String ownerAddress = (String) jTblRealEstatesBuyer.getValueAt(selectedRow, 0);
+            String reAddress = (String) jTblRealEstatesBuyer.getValueAt(selectedRow, 1);
+            int area = (int) jTblRealEstatesBuyer.getValueAt(selectedRow, 2);
+            int distance = (int) jTblRealEstatesBuyer.getValueAt(selectedRow, 3);
+            int price = (int) jTblRealEstatesBuyer.getValueAt(selectedRow, 4);
 
             int id = -1;
             try {
@@ -277,9 +279,15 @@ public class FBuyer extends javax.swing.JFrame {
         // TODO add your handling code here:
         FAllRealEstates fAllRealEstates = new FAllRealEstates(currentUser);
         fAllRealEstates.setVisible(true);
-        
+
         dispose();
     }//GEN-LAST:event_jBttnBackActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        // TODO add your handling code here:
+        RealEstateTableModel retm = (RealEstateTableModel) jTblRealEstatesBuyer.getModel();
+        retm.refreshTable();
+    }//GEN-LAST:event_formWindowActivated
 
     /**
      * @param args the command line arguments
@@ -294,7 +302,7 @@ public class FBuyer extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTblRealEstates;
+    private javax.swing.JTable jTblRealEstatesBuyer;
     // End of variables declaration//GEN-END:variables
 
     private void centerForm() {
@@ -308,7 +316,7 @@ public class FBuyer extends javax.swing.JFrame {
             List<RealEstate> filteredListRealEstates = filterListForBuyerView(realEstates);
 
             RealEstateTableModel realEstateTableModel = new RealEstateTableModel(filteredListRealEstates);
-            jTblRealEstates.setModel(realEstateTableModel);
+            jTblRealEstatesBuyer.setModel(realEstateTableModel);
 
             realEstateTableModel.refreshTable();
 
@@ -341,11 +349,11 @@ public class FBuyer extends javax.swing.JFrame {
     }
 
     private void setColumnSizes() {
-        jTblRealEstates.getColumnModel().getColumn(0).setPreferredWidth(250);
-        jTblRealEstates.getColumnModel().getColumn(1).setPreferredWidth(100);
-        jTblRealEstates.getColumnModel().getColumn(2).setPreferredWidth(50);
-        jTblRealEstates.getColumnModel().getColumn(3).setPreferredWidth(100);
-        jTblRealEstates.getColumnModel().getColumn(4).setPreferredWidth(80);
+        jTblRealEstatesBuyer.getColumnModel().getColumn(0).setPreferredWidth(250);
+        jTblRealEstatesBuyer.getColumnModel().getColumn(1).setPreferredWidth(100);
+        jTblRealEstatesBuyer.getColumnModel().getColumn(2).setPreferredWidth(50);
+        jTblRealEstatesBuyer.getColumnModel().getColumn(3).setPreferredWidth(100);
+        jTblRealEstatesBuyer.getColumnModel().getColumn(4).setPreferredWidth(80);
     }
 
 }
