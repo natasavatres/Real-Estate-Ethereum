@@ -325,7 +325,7 @@ public class FBuyer extends javax.swing.JFrame {
         }
     }
 
-    private List<RealEstate> filterListForBuyerView(List<RealEstate> realEstates) {
+    public List<RealEstate> filterListForBuyerView(List<RealEstate> realEstates) {
 
         List<RealEstate> filtered = new ArrayList<>();
 

@@ -271,7 +271,7 @@ public class FAllRealEstates extends javax.swing.JFrame {
         }
     }
 
-    private List<RealEstate> filterListForAllRealEstates(List<RealEstate> realEstates) {
+    public List<RealEstate> filterListForAllRealEstates(List<RealEstate> realEstates) {
         List<RealEstate> filtered = new ArrayList<>();
 
         int index;

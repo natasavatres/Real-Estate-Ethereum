@@ -9,8 +9,6 @@ import com.verisec.realestateeth.db.DatabaseRepository;
 import com.verisec.realestateeth.domain.Contracts;
 import com.verisec.realestateeth.domain.User;
 import static com.verisec.realestateeth.forms.FAdmin.logger;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *

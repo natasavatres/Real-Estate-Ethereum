@@ -5,6 +5,8 @@
  */
 package com.verisec.realestateeth.domain;
 
+import java.util.Objects;
+
 /**
  *
  * @author Natasa Vatres
@@ -80,6 +82,39 @@ public class RealEstate {
     @Override
     public String toString() {
         return "\n Owner address: " + ownerAddress + "\n Location: " + realEstateAddress + "\n Area: " + area + "\n Distance form center:  " + centerDistance + "\n Price: " + price;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final RealEstate other = (RealEstate) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        if (this.area != other.area) {
+            return false;
+        }
+        if (this.centerDistance != other.centerDistance) {
+            return false;
+        }
+        if (this.price != other.price) {
+            return false;
+        }
+        if (!Objects.equals(this.ownerAddress, other.ownerAddress)) {
+            return false;
+        }
+        if (!Objects.equals(this.realEstateAddress, other.realEstateAddress)) {
+            return false;
+        }
+        return true;
     }
     
     
