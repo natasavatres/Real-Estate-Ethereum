@@ -80,7 +80,7 @@ public class Contracts {
         contractBS.setRealEstate(BigInteger.valueOf(2), "0x3590aca93338b0721966a8d0c96ebf2c4c87c544", "Marka Celebonovica 27", BigInteger.valueOf(45), BigInteger.valueOf(10), BigInteger.valueOf(300)).send();
     }
 
-    private List<RealEstate> createRealEstatesList(BuyingSelling contract) throws Exception {
+    protected List<RealEstate> createRealEstatesList(BuyingSelling contract) throws Exception {
 
         List<RealEstate> result = new ArrayList<>();
 
@@ -88,7 +88,7 @@ public class Contracts {
         Tuple6<BigInteger, String, String, BigInteger, BigInteger, BigInteger> returnVal;
 
         for (BigInteger realEstateID : realEstateIDs) {
-            returnVal = contractBS.getRealEstate(realEstateID).send();
+            returnVal = contract.getRealEstate(realEstateID).send();
             BigInteger idRE = returnVal.getValue1();
             String ownerAddr = returnVal.getValue2();
             String reAddr = returnVal.getValue3();
