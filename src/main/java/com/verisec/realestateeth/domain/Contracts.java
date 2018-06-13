@@ -76,8 +76,8 @@ public class Contracts {
 
         controller.addAdminContract(contractBS);
 
-        contractBS.setRealEstate(BigInteger.valueOf(1), "0x3590aca93338b0721966a8d0c96ebf2c4c87c544", "Francuska 5", BigInteger.valueOf(40), BigInteger.valueOf(1), BigInteger.valueOf(500)).send();
-        contractBS.setRealEstate(BigInteger.valueOf(2), "0x3590aca93338b0721966a8d0c96ebf2c4c87c544", "Marka Celebonovica 27", BigInteger.valueOf(45), BigInteger.valueOf(10), BigInteger.valueOf(300)).send();
+        contractBS.setRealEstate(BigInteger.valueOf(1), "0x3590aca93338b0721966a8d0c96ebf2c4c87c544", "Francuska 5", BigInteger.valueOf(40), BigInteger.valueOf(1), BigInteger.valueOf(80000)).send();
+        contractBS.setRealEstate(BigInteger.valueOf(2), "0x8cc5a1a0802db41db826c2fcb72423744338dcb0", "Marka Celebonovica 27", BigInteger.valueOf(45), BigInteger.valueOf(10), BigInteger.valueOf(45000)).send();
     }
 
     protected List<RealEstate> createRealEstatesList(BuyingSellingWrapper buyingSellingWrapper) throws Exception {
@@ -264,6 +264,8 @@ public class Contracts {
                 BigInteger.valueOf(offer.getRealEstate().getPrice())).send();
 
         contractTF.pay(GAS_PRICE).send();
+        contractTF.destroy();
+        databaseRepository.deleteContract(contractTF.getContractAddress());
 
     }
 

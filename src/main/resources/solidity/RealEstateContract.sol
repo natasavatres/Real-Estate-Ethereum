@@ -94,13 +94,6 @@ function getOffer() public constant returns(uint) {
     return amount;
 }
 
-//function setId(uint i) public{
-//    id=i;
-//}
-
-//function getId() public returns (uint){
-//   return id;
-//}
 
 function accept() public returns(bool) {
    return accepted=true;
@@ -123,4 +116,9 @@ function pay() payable public{
     
 }
 
-}
+function destroy() { // so funds not locked in contract forever
+    
+      suicide(seller); // send funds to organizer
+    }
+  }
+

@@ -139,7 +139,7 @@ public class FCheckBuyerOffers extends javax.swing.JFrame {
         // TODO add your handling code here:
         FBuyer fBuyer = new FBuyer(currentUser);
         fBuyer.setVisible(true);
-        
+
         this.dispose();
     }//GEN-LAST:event_jBttnBackActionPerformed
 
@@ -185,12 +185,10 @@ public class FCheckBuyerOffers extends javax.swing.JFrame {
         if (selectedRow >= 0) {
             try {
                 contractAddress = allOffers.get(selectedRow).getContractAddress();
-                controller.acceptOffer(contractAddress, currentUser);
+                controller.deleteContract(contractAddress);
 
                 JOptionPane.showMessageDialog(this, "Offer deleted!");
                 allOffers.remove(selectedRow);
-
-                controller.deleteContract(contractAddress);
 
                 buyerOfferTableModel.refreshTable();
 
