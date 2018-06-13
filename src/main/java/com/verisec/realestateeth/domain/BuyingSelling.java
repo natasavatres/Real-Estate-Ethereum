@@ -44,35 +44,28 @@ public class BuyingSelling extends Contract {
         final Function function = new Function("getRealEstate", 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(id)), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}, new TypeReference<Address>() {}, new TypeReference<Utf8String>() {}, new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
-        return new RemoteCall<Tuple6<BigInteger, String, String, BigInteger, BigInteger, BigInteger>>(
-                new Callable<Tuple6<BigInteger, String, String, BigInteger, BigInteger, BigInteger>>() {
-                    @Override
-                    public Tuple6<BigInteger, String, String, BigInteger, BigInteger, BigInteger> call() throws Exception {
-                        List<Type> results = executeCallMultipleValueReturn(function);
-                        return new Tuple6<BigInteger, String, String, BigInteger, BigInteger, BigInteger>(
-                                (BigInteger) results.get(0).getValue(), 
-                                (String) results.get(1).getValue(), 
-                                (String) results.get(2).getValue(), 
-                                (BigInteger) results.get(3).getValue(), 
-                                (BigInteger) results.get(4).getValue(), 
-                                (BigInteger) results.get(5).getValue());
-                    }
-                });
+        return new RemoteCall<>(
+                () -> {
+                    List<Type> results = executeCallMultipleValueReturn(function);
+                    return new Tuple6<>(
+                            (BigInteger) results.get(0).getValue(),
+                            (String) results.get(1).getValue(),
+                            (String) results.get(2).getValue(),
+                            (BigInteger) results.get(3).getValue(),
+                            (BigInteger) results.get(4).getValue(),
+                            (BigInteger) results.get(5).getValue());
+        });
     }
 
     public RemoteCall<List> getAllRealEstates() {
         final Function function = new Function("getAllRealEstates", 
                 Arrays.<Type>asList(), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<DynamicArray<Uint256>>() {}));
-        return new RemoteCall<List>(
-                new Callable<List>() {
-                    @Override
-                    @SuppressWarnings("unchecked")
-                    public List call() throws Exception {
-                        List<Type> result = (List<Type>) executeCallSingleValueReturn(function, List.class);
-                        return convertToNative(result);
-                    }
-                });
+        return new RemoteCall<>(
+                () -> {
+                    List<Type> result = (List<Type>) executeCallSingleValueReturn(function, List.class);
+                    return convertToNative(result);
+        });
     }
 
     public RemoteCall<TransactionReceipt> setRealEstate(BigInteger id, String o, String rea, BigInteger a, BigInteger cd, BigInteger p) {
