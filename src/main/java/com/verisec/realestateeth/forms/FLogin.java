@@ -102,7 +102,8 @@ public class FLogin extends javax.swing.JFrame {
             String password = jTxtPassword.getText().trim();
 
             Controller controller = new Controller();
-            User user = controller.findUser(username, password);
+            String encryptedPassword = controller.encrypt(password).toUpperCase();
+            User user = controller.findUser(username, encryptedPassword);
 
             if (user == null) {
                 JOptionPane.showMessageDialog(this, "There is no user with these credentials!");

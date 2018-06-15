@@ -32,16 +32,16 @@ CREATE TABLE `contract` (
 /*Data for the table `contract` */
 
 insert  into `contract`(`address_contract`,`address_buyer`,`address_seller`,`id_real_estate`,`date`) values 
-('0x896341726405e9f284879f23b0238e375634fe12','000','000',0,'2018-06-06');
+('0xe0f66057cfc027ac560ea29a257908b1d43bca2f','000','000',0,'2018-06-15');
 
 /*Table structure for table `user` */
 
 DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user` (
-  `address` varchar(60) DEFAULT NULL,
+  `address` varchar(60) NOT NULL,
   `username` varchar(30) NOT NULL,
-  `password` varchar(30) DEFAULT NULL,
+  `password` varchar(64) DEFAULT NULL,
   `first_name` varchar(30) DEFAULT NULL,
   `last_name` varchar(30) DEFAULT NULL,
   `private_key` varchar(70) DEFAULT NULL,
@@ -51,10 +51,9 @@ CREATE TABLE `user` (
 /*Data for the table `user` */
 
 insert  into `user`(`address`,`username`,`password`,`first_name`,`last_name`,`private_key`) values 
-('','',NULL,NULL,NULL,NULL),
-('0x3590aca93338b0721966a8d0c96ebf2c4c87c544','admin','admin','Administrator','Administrator','bc5b578e0dcb2dbf98dd6e5fe62cb5a28b84a55e15fc112d4ca88e1f62bd7c35'),
-('0x3590aca93338b0721966a8d0c96ebf2c4c87c544','mica','mica','Milica','Jelic','bc5b578e0dcb2dbf98dd6e5fe62cb5a28b84a55e15fc112d4ca88e1f62bd7c35'),
-('0x8cc5a1a0802db41db826c2fcb72423744338dcb0','nata','nata','Natasa','Vatres','df504d175ae63abf209bad9dda965310d99559620550e74521a6798a41215f46');
+('0x3590aca93338b0721966a8d0c96ebf2c4c87c544','admin','8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918','Administrator','Administrator','bc5b578e0dcb2dbf98dd6e5fe62cb5a28b84a55e15fc112d4ca88e1f62bd7c35'),
+('0x3590aca93338b0721966a8d0c96ebf2c4c87c544','mica','28197B5BC773560247F924D4BDAEC0424CFD019846DB4DAFCCCB06CE77D3FADE','Milica','Jelic','bc5b578e0dcb2dbf98dd6e5fe62cb5a28b84a55e15fc112d4ca88e1f62bd7c35'),
+('0x8cc5a1a0802db41db826c2fcb72423744338dcb0','nata','5183D093E6153294550841731A95ACACADCA6FE133BB36E0F7A3BBE6342E8DC7','Natasa','Vatres','df504d175ae63abf209bad9dda965310d99559620550e74521a6798a41215f46');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

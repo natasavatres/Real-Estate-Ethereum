@@ -12,6 +12,7 @@ import com.verisec.realestateeth.domain.Contracts;
 import com.verisec.realestateeth.domain.Offer;
 import com.verisec.realestateeth.domain.RealEstate;
 import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.util.List;
 
 /**
@@ -80,4 +81,19 @@ public class Controller {
         contract.payRealEstate(offer, buyer);
     }
 
+    public String encrypt(String password) throws Exception{
+    
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        md.update(password.getBytes());
+        return bytesToHex(md.digest());
+
+    }
+
+    private static String bytesToHex(byte[] bytes) {
+        StringBuilder result = new StringBuilder();
+        for (byte b : bytes) {
+            result.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+        }
+        return result.toString();
+    }
 }
