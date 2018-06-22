@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
+import javax.swing.table.TableColumnModel;
 import org.apache.log4j.Logger;
 
 /**
@@ -39,6 +40,7 @@ public class FAllRealEstates extends javax.swing.JFrame {
         centerForm();
         populateTableAllRealEstates();
         setUpRadioButtons();
+        setColumnSizes();
     }
 
     /**
@@ -62,7 +64,6 @@ public class FAllRealEstates extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("All real estates");
-        setPreferredSize(new java.awt.Dimension(810, 410));
         setSize(new java.awt.Dimension(810, 410));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
@@ -138,8 +139,7 @@ public class FAllRealEstates extends javax.swing.JFrame {
                                 .addGap(45, 45, 45)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jRadioBuyer)
-                                    .addComponent(jRadioSeller))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(jRadioSeller)))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jBttnNext, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -181,7 +181,7 @@ public class FAllRealEstates extends javax.swing.JFrame {
                         .addGap(9, 9, 9)
                         .addComponent(jBttnOwnership)
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(57, 57, 57))
+                .addGap(48, 48, 48))
         );
 
         pack();
@@ -296,5 +296,18 @@ public class FAllRealEstates extends javax.swing.JFrame {
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(jRadioBuyer);
         buttonGroup.add(jRadioSeller);
+    }
+
+    private void setColumnSizes() {
+
+        jTblAllRealEstates.setRowHeight(20);
+
+        TableColumnModel columnModel = jTblAllRealEstates.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(300);
+        columnModel.getColumn(1).setPreferredWidth(125);
+        columnModel.getColumn(2).setPreferredWidth(50);
+        columnModel.getColumn(3).setPreferredWidth(100);
+        columnModel.getColumn(4).setPreferredWidth(55);
+
     }
 }

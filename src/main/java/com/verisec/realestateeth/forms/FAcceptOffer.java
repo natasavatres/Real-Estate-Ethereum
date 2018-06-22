@@ -11,6 +11,7 @@ import com.verisec.realestateeth.domain.beans.User;
 import com.verisec.realestateeth.table.model.OfferTableModel;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import org.apache.log4j.Logger;
 
@@ -29,7 +30,7 @@ public class FAcceptOffer extends javax.swing.JFrame {
 
     User currentUser;
     ContractsController contractsController = new ContractsController();
-    
+
     final static Logger LOGGER = Logger.getLogger(FAcceptOffer.class);
 
     FAcceptOffer(User seller) {
@@ -37,6 +38,7 @@ public class FAcceptOffer extends javax.swing.JFrame {
         currentUser = seller;
         centerForm();
         populateTableOffers(seller);
+        setColumnSizes();
     }
 
     /**
@@ -102,25 +104,25 @@ public class FAcceptOffer extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(184, 184, 184)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(51, Short.MAX_VALUE)
+                .addContainerGap(26, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 583, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(26, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(257, 257, 257))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(128, 128, 128)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jBttnAccept, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(jBttnDecline, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addContainerGap())
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(49, 49, 49)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jBttnAccept, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jBttnDecline, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jBttnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(141, 141, 141))))
+                        .addGap(93, 93, 93)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -149,7 +151,7 @@ public class FAcceptOffer extends javax.swing.JFrame {
         int selectedRow = jTblOffers.getSelectedRow();
 
         OfferTableModel offerTableModel = (OfferTableModel) jTblOffers.getModel();
-        
+
         if (selectedRow >= 0) {
 
             try {
@@ -221,5 +223,14 @@ public class FAcceptOffer extends javax.swing.JFrame {
 
     private void centerForm() {
         setLocationRelativeTo(null);
+    }
+
+    private void setColumnSizes() {
+        jTblOffers.setRowHeight(20);
+
+        TableColumnModel columnModel = jTblOffers.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(300);
+        columnModel.getColumn(1).setPreferredWidth(100);
+        columnModel.getColumn(2).setPreferredWidth(100);
     }
 }

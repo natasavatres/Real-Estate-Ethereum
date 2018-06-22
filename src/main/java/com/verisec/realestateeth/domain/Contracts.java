@@ -16,6 +16,7 @@ import com.verisec.realestateeth.db.DatabaseRepository;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
@@ -31,7 +32,7 @@ import static org.web3j.tx.ManagedTransaction.GAS_PRICE;
  */
 public class Contracts {
 
-    final static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(Contracts.class);
+    final static Logger LOGGER = Logger.getLogger(Contracts.class);
     int cost = 100;
 
     DatabaseController dbController;
@@ -48,7 +49,7 @@ public class Contracts {
 
         EthGetBalance ethGetBalance3 = web3.ethGetBalance(buyer.getAddress(), DefaultBlockParameterName.LATEST).sendAsync().get();
         BigInteger balance3 = ethGetBalance3.getBalance();
-        logger.info("Buyer account balance is " + balance3);
+        LOGGER.info("Buyer account balance is " + balance3);
 
         String buyerPK = buyer.getPrivateKey();
         Credentials credentials = Credentials.create(buyerPK);
@@ -164,7 +165,7 @@ public class Contracts {
                     contractTF = TransferingFunds.load(contractAddress, web3, credentials, GAS_PRICE, GAS_LIMIT);
 
                     offerState = contractTF.getState().send();
-                    logger.info(offerState);
+                    LOGGER.info(offerState);
 
                     if (offerSet.equals(offerState)) {
                         offeredPrice = (BigInteger) contractTF.getOffer().send();

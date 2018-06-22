@@ -165,7 +165,7 @@ public class FAdmin extends javax.swing.JFrame {
             LOGGER.info("Application successfully started");
         } catch (Exception ex) {
             jBttnStart.setEnabled(true);
-            LOGGER.info("Application already started");
+            LOGGER.info("Application not started yet");
         }
 
     }
