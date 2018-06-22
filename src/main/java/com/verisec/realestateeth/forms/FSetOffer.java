@@ -5,9 +5,9 @@
  */
 package com.verisec.realestateeth.forms;
 
-import com.verisec.realestateeth.controller.Controller;
-import com.verisec.realestateeth.domain.RealEstate;
-import com.verisec.realestateeth.domain.User;
+import com.verisec.realestateeth.controller.ContractsController;
+import com.verisec.realestateeth.domain.beans.RealEstate;
+import com.verisec.realestateeth.domain.beans.User;
 import java.math.BigInteger;
 import javax.swing.JOptionPane;
 
@@ -26,7 +26,7 @@ public class FSetOffer extends javax.swing.JFrame {
 
     User currentUser;
     RealEstate currentRealEstate;
-    Controller controller;
+    ContractsController contractsController = new ContractsController();
 
     public FSetOffer(User user, RealEstate realEstate) {
         initComponents();
@@ -188,9 +188,8 @@ public class FSetOffer extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Please enter offer!");
         } else {
             BigInteger offer = new BigInteger(offerS);
-            controller = new Controller();
             try {
-                controller.createBuyerContract(currentUser, currentRealEstate, offer);
+                contractsController.createBuyerContract(currentUser, currentRealEstate, offer);
                 JOptionPane.showMessageDialog(this, "Offer set successfully!");
                 dispose();
             } catch (Exception ex) {

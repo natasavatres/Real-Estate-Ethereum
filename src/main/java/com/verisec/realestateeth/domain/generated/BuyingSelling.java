@@ -1,4 +1,4 @@
-package com.verisec.realestateeth.domain;
+package com.verisec.realestateeth.domain.generated;
 
 import java.math.BigInteger;
 import java.util.Arrays;

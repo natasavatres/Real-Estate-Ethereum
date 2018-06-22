@@ -5,7 +5,13 @@
  */
 package com.verisec.realestateeth.domain;
 
-import com.verisec.realestateeth.controller.Controller;
+import com.verisec.realestateeth.domain.beans.User;
+import com.verisec.realestateeth.domain.beans.ContractEntity;
+import com.verisec.realestateeth.domain.beans.RealEstate;
+import com.verisec.realestateeth.domain.beans.Offer;
+import com.verisec.realestateeth.domain.generated.TransferingFunds;
+import com.verisec.realestateeth.domain.generated.BuyingSelling;
+import com.verisec.realestateeth.controller.DatabaseController;
 import com.verisec.realestateeth.db.DatabaseRepository;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -28,14 +34,12 @@ public class Contracts {
     final static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(Contracts.class);
     int cost = 100;
 
-    DatabaseRepository databaseRepository;
-    Controller controller;
+    DatabaseController dbController;
     BuyingSelling contractBS;
     TransferingFunds contractTF;
 
     public Contracts() {
-        databaseRepository = new DatabaseRepository();
-        controller = new Controller();
+        dbController = new DatabaseController();
     }
 
     public void createBuyerContract(User buyer, RealEstate realEstate, BigInteger offer) throws Exception {
@@ -49,11 +53,11 @@ public class Contracts {
         String buyerPK = buyer.getPrivateKey();
         Credentials credentials = Credentials.create(buyerPK);
 
-        String adminContractAddress = databaseRepository.getContractAddress("000", "000");
+        String adminContractAddress = dbController.getContractAddress("000", "000");
 
         contractTF = TransferingFunds.deploy(web3, credentials, GAS_PRICE, GAS_LIMIT, adminContractAddress).send();
 
-        databaseRepository.addContract(buyer, realEstate, contractTF);
+        dbController.addContract(buyer, realEstate, contractTF);
 
         contractTF.setSeller(realEstate.getOwnerAddress()).send();
         contractTF.setOffer(offer).send();
@@ -70,11 +74,11 @@ public class Contracts {
     public void createAdminContract() throws Exception {
 
         Web3j web3 = createWeb3j();
-        String adminPK = controller.getPrivateKey("admin");
+        String adminPK = dbController.getPrivateKey("admin");
         Credentials credentials = Credentials.create(adminPK);
         contractBS = BuyingSelling.deploy(web3, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386)).send();
 
-        controller.addAdminContract(contractBS);
+        dbController.addAdminContract(contractBS);
 
         contractBS.setRealEstate(BigInteger.valueOf(1), "0x3590aca93338b0721966a8d0c96ebf2c4c87c544", "Francuska 5", BigInteger.valueOf(40), BigInteger.valueOf(1), BigInteger.valueOf(80000)).send();
         contractBS.setRealEstate(BigInteger.valueOf(2), "0x8cc5a1a0802db41db826c2fcb72423744338dcb0", "Marka Celebonovica 27", BigInteger.valueOf(45), BigInteger.valueOf(10), BigInteger.valueOf(45000)).send();
@@ -104,10 +108,9 @@ public class Contracts {
     public List<RealEstate> getAllRealEstates(User buyer) throws Exception {
 
         Web3j web3 = createWeb3j();
-        DatabaseRepository dbr = new DatabaseRepository();
-        String adminContractAddress = dbr.getContractAddress("000", "000");
+        String adminContractAddress = dbController.getContractAddress("000", "000");
 
-        String buyerPK = controller.getPrivateKey(buyer.getUsername());
+        String buyerPK = dbController.getPrivateKey(buyer.getUsername());
         Credentials credentials = Credentials.create(buyerPK);
 
         contractBS = BuyingSelling.load(adminContractAddress, web3, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386));
@@ -121,10 +124,9 @@ public class Contracts {
         List<RealEstate> realEstates = new ArrayList<>();
 
         Web3j web3 = createWeb3j();
-        DatabaseRepository dbr = new DatabaseRepository();
-        String adminContractAddress = dbr.getContractAddress("000", "000");
+        String adminContractAddress = dbController.getContractAddress("000", "000");
 
-        String sellerPK = controller.getPrivateKey(seller.getUsername());
+        String sellerPK = dbController.getPrivateKey(seller.getUsername());
         Credentials credentials = Credentials.create(sellerPK);
 
         contractBS = BuyingSelling.load(adminContractAddress, web3, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386));
@@ -132,11 +134,9 @@ public class Contracts {
         BuyingSellingWrapper buyingSellingWrapper = new BuyingSellingWrapper(contractBS);
 
         List<RealEstate> allRealEstates = createRealEstatesList(buyingSellingWrapper);
-        for (RealEstate realEstate : allRealEstates) {
-            if (realEstate.getOwnerAddress().equals(seller.getAddress())) {
-                realEstates.add(realEstate);
-            }
-        }
+        allRealEstates.stream().filter((realEstate) -> (realEstate.getOwnerAddress().equals(seller.getAddress()))).forEachOrdered((realEstate) -> {
+            realEstates.add(realEstate);
+        });
 
         return realEstates;
     }
@@ -147,14 +147,12 @@ public class Contracts {
         List<Offer> offerList = new ArrayList<>();
 
         Web3j web3 = createWeb3j();
+        String adminContractAddress = dbController.getContractAddress("000", "000");
 
-        DatabaseRepository dbr = new DatabaseRepository();
-        String adminContractAddress = dbr.getContractAddress("000", "000");
-
-        String sellerPK = controller.getPrivateKey(seller.getUsername());
+        String sellerPK = dbController.getPrivateKey(seller.getUsername());
         Credentials credentials = Credentials.create(sellerPK);
 
-        List<ContractEntity> contractEntityList = databaseRepository.getContractsWithSeller(seller);
+        List<ContractEntity> contractEntityList = dbController.getContractsWithSeller(seller);
 
         BigInteger offeredPrice;
         String offerState;
@@ -183,7 +181,7 @@ public class Contracts {
     public void acceptOffer(String contractAddress, User seller) throws Exception {
         Web3j web3 = createWeb3j();
 
-        String sellerPK = controller.getPrivateKey(seller.getUsername());
+        String sellerPK = dbController.getPrivateKey(seller.getUsername());
         Credentials credentials = Credentials.create(sellerPK);
 
         contractTF = TransferingFunds.load(contractAddress, web3, credentials, GAS_PRICE, GAS_LIMIT);
@@ -194,7 +192,7 @@ public class Contracts {
 
     public void declineOffer(String contractAddress, User seller) throws Exception {
         Web3j web3 = createWeb3j();
-        String sellerPK = controller.getPrivateKey(seller.getUsername());
+        String sellerPK = dbController.getPrivateKey(seller.getUsername());
         Credentials credentials = Credentials.create(sellerPK);
 
         contractTF = TransferingFunds.load(contractAddress, web3, credentials, GAS_PRICE, GAS_LIMIT);
@@ -220,14 +218,12 @@ public class Contracts {
         List<Offer> offerList = new ArrayList<>();
 
         Web3j web3 = createWeb3j();
+        String adminContractAddress = dbController.getContractAddress("000", "000");
 
-        DatabaseRepository dbr = new DatabaseRepository();
-        String adminContractAddress = dbr.getContractAddress("000", "000");
-
-        String buyerPK = controller.getPrivateKey(buyer.getUsername());
+        String buyerPK = dbController.getPrivateKey(buyer.getUsername());
         Credentials credentials = Credentials.create(buyerPK);
 
-        List<ContractEntity> buyerContracts = databaseRepository.getAllBuyerContracts(buyer);
+        List<ContractEntity> buyerContracts = dbController.getAllBuyerContracts(buyer);
 
         contractBS = BuyingSelling.load(adminContractAddress, web3, credentials, GAS_PRICE, GAS_LIMIT);
 
@@ -246,11 +242,10 @@ public class Contracts {
     public void payRealEstate(Offer offer, User buyer) throws Exception {
 
         Web3j web3 = createWeb3j();
-        String buyerPK = controller.getPrivateKey(buyer.getUsername());
+        String buyerPK = dbController.getPrivateKey(buyer.getUsername());
         Credentials credentials = Credentials.create(buyerPK);
 
-        DatabaseRepository dbr = new DatabaseRepository();
-        String adminContractAddress = dbr.getContractAddress("000", "000");
+        String adminContractAddress = dbController.getContractAddress("000", "000");
         contractBS = BuyingSelling.load(adminContractAddress, web3, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386));
 
         List<BigInteger> realEstateIDs = (List<BigInteger>) contractBS.getAllRealEstates().send();
@@ -265,18 +260,17 @@ public class Contracts {
 
         contractTF.pay(GAS_PRICE).send();
         contractTF.destroy();
-        databaseRepository.deleteContract(contractTF.getContractAddress());
+        dbController.deleteContract(contractTF.getContractAddress());
 
     }
 
     public int getIdForNewRealEstate(User admin) throws Exception {
         Web3j web3 = createWeb3j();
 
-        String adminPK = controller.getPrivateKey(admin.getUsername());
+        String adminPK = dbController.getPrivateKey(admin.getUsername());
         Credentials credentials = Credentials.create(adminPK);
 
-        DatabaseRepository dbr = new DatabaseRepository();
-        String adminContractAddress = dbr.getContractAddress("000", "000");
+        String adminContractAddress = dbController.getContractAddress("000", "000");
         contractBS = BuyingSelling.load(adminContractAddress, web3, credentials, BigInteger.valueOf(240000), BigInteger.valueOf(4712386));
 
         List<BigInteger> realEstateIDs = (List<BigInteger>) contractBS.getAllRealEstates().send();
@@ -287,7 +281,7 @@ public class Contracts {
     public void addRealEstate(RealEstate re) throws Exception {
         Web3j web3 = createWeb3j();
 
-        String adminPK = controller.getPrivateKey("admin");
+        String adminPK = dbController.getPrivateKey("admin");
         Credentials credentials = Credentials.create(adminPK);
 
         DatabaseRepository dbr = new DatabaseRepository();
@@ -304,7 +298,7 @@ public class Contracts {
     public int getIdByOwnerAndLocation(User buyer, String ownerAddress, String reAddress) throws Exception {
 
         Web3j web3 = createWeb3j();
-        String buyerPK = controller.getPrivateKey(buyer.getUsername());
+        String buyerPK = dbController.getPrivateKey(buyer.getUsername());
         Credentials credentials = Credentials.create(buyerPK);
 
         DatabaseRepository dbr = new DatabaseRepository();

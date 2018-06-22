@@ -5,11 +5,11 @@
  */
 package com.verisec.realestateeth.db;
 
-import com.verisec.realestateeth.domain.BuyingSelling;
-import com.verisec.realestateeth.domain.ContractEntity;
-import com.verisec.realestateeth.domain.RealEstate;
-import com.verisec.realestateeth.domain.TransferingFunds;
-import com.verisec.realestateeth.domain.User;
+import com.verisec.realestateeth.domain.generated.BuyingSelling;
+import com.verisec.realestateeth.domain.beans.ContractEntity;
+import com.verisec.realestateeth.domain.beans.RealEstate;
+import com.verisec.realestateeth.domain.generated.TransferingFunds;
+import com.verisec.realestateeth.domain.beans.User;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -27,10 +27,17 @@ public class DatabaseRepository {
 
     Connection connection;
 
+    private final String FIND_USER_QUERY = "SELECT * FROM user WHERE username = ? AND password = ?";
+    private final String GET_USER_PRIVATE_KEY_QUERY = "SELECT private_key FROM user WHERE username=?";
+    private final String ADD_CONTRACT_QUERY = "INSERT INTO contract (address_contract, address_buyer, address_seller, id_real_estate, date) VALUES (?,?,?,?,?)";
+    private final String GET_CONTRACT_ADDRESS_QUERY = "SELECT address_contract FROM contract WHERE address_buyer =? AND address_seller = ?";
+    private final String GET_CONTRACTS_WITH_SELLER_QUERY = "SELECT * FROM contract WHERE address_seller = ?";
+    private final String GET_ALL_BUYER_CONTRACTS_QUERY = "SELECT * FROM contract WHERE address_buyer = ?";
+    private final String DELETE_CONTRACT_QUERY = "DELETE FROM contract WHERE address_contract = ?";
+
     public User findUser(String un, String pass) throws Exception {
         connection = DatabaseConnection.getInstance().getConnection();
-        String query = "SELECT * FROM user WHERE username = ? AND password = ?";
-        PreparedStatement ps = connection.prepareStatement(query);
+        PreparedStatement ps = connection.prepareStatement(FIND_USER_QUERY);
         ps.setString(1, un);
         ps.setString(2, pass);
         ResultSet rs = ps.executeQuery();
@@ -49,13 +56,12 @@ public class DatabaseRepository {
 
             return user;
         }
-        throw new Exception("There is no user with these credentials!");
+        throw new Exception("There is no such user!");
     }
 
     public String getPrivateKey(String user) throws Exception {
         connection = DatabaseConnection.getInstance().getConnection();
-        String query = "SELECT private_key FROM user WHERE username=?";
-        PreparedStatement ps = connection.prepareStatement(query);
+        PreparedStatement ps = connection.prepareStatement(GET_USER_PRIVATE_KEY_QUERY);
         ps.setString(1, user);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
@@ -70,12 +76,10 @@ public class DatabaseRepository {
     }
 
     public void addAdminContract(BuyingSelling contract) {
-        String query = "INSERT INTO contract (address_contract, address_buyer, address_seller, id_real_estate, date) VALUES (?,?,?,?,?)";
-
         try {
             connection = DatabaseConnection.getInstance().getConnection();
 
-            PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = connection.prepareStatement(ADD_CONTRACT_QUERY, Statement.RETURN_GENERATED_KEYS);
 
             ps.setString(1, contract.getContractAddress());
             ps.setString(2, "000");
@@ -101,8 +105,7 @@ public class DatabaseRepository {
 
     public String getContractAddress(String addressBuyer, String addressSeller) throws Exception {
         connection = DatabaseConnection.getInstance().getConnection();
-        String query = "SELECT address_contract FROM contract WHERE address_buyer =? AND address_seller = ?";
-        PreparedStatement ps = connection.prepareStatement(query);
+        PreparedStatement ps = connection.prepareStatement(GET_CONTRACT_ADDRESS_QUERY);
         ps.setString(1, addressBuyer);
         ps.setString(2, addressSeller);
         ResultSet rs = ps.executeQuery();
@@ -118,13 +121,10 @@ public class DatabaseRepository {
     }
 
     public void addContract(User buyer, RealEstate realEstate, TransferingFunds contractTF) {
-        String query = "INSERT INTO contract (address_contract, address_buyer, address_seller, id_real_estate, date) VALUES (?,?,?,?,?)";
-
         try {
-
             connection = DatabaseConnection.getInstance().getConnection();
 
-            PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = connection.prepareStatement(ADD_CONTRACT_QUERY, Statement.RETURN_GENERATED_KEYS);
 
             ps.setString(1, contractTF.getContractAddress());
             ps.setString(2, buyer.getAddress());
@@ -153,8 +153,7 @@ public class DatabaseRepository {
 
         try {
             connection = DatabaseConnection.getInstance().getConnection();
-            String query = "SELECT * FROM contract WHERE address_seller = ?";
-            PreparedStatement ps = connection.prepareStatement(query);
+            PreparedStatement ps = connection.prepareStatement(GET_CONTRACTS_WITH_SELLER_QUERY);
             ps.setString(1, seller.getAddress());
 
             ResultSet rs = ps.executeQuery();
@@ -186,8 +185,7 @@ public class DatabaseRepository {
 
         try {
             connection = DatabaseConnection.getInstance().getConnection();
-            String query = "SELECT * FROM contract WHERE address_buyer = ?";
-            PreparedStatement ps = connection.prepareStatement(query);
+            PreparedStatement ps = connection.prepareStatement(GET_ALL_BUYER_CONTRACTS_QUERY);
             ps.setString(1, buyer.getAddress());
 
             ResultSet rs = ps.executeQuery();
@@ -213,11 +211,9 @@ public class DatabaseRepository {
     }
 
     public void deleteContract(String contractAddress) {
-        String query = "DELETE FROM contract WHERE address_contract = ?";
-
         try {
             connection = DatabaseConnection.getInstance().getConnection();
-            PreparedStatement ps = connection.prepareStatement(query);
+            PreparedStatement ps = connection.prepareStatement(DELETE_CONTRACT_QUERY);
             ps.setString(1, contractAddress);
             ps.executeUpdate();
 

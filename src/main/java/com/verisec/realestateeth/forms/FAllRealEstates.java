@@ -5,10 +5,10 @@
  */
 package com.verisec.realestateeth.forms;
 
-import com.verisec.realestateeth.controller.Controller;
+import com.verisec.realestateeth.controller.ContractsController;
 import com.verisec.realestateeth.domain.Contracts;
-import com.verisec.realestateeth.domain.RealEstate;
-import com.verisec.realestateeth.domain.User;
+import com.verisec.realestateeth.domain.beans.RealEstate;
+import com.verisec.realestateeth.domain.beans.User;
 import com.verisec.realestateeth.table.model.RealEstateTableModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +29,7 @@ public class FAllRealEstates extends javax.swing.JFrame {
     }
 
     User currentUser;
+    ContractsController contractsController = new ContractsController();
 
     public FAllRealEstates(User user) {
         initComponents();
@@ -200,7 +201,7 @@ public class FAllRealEstates extends javax.swing.JFrame {
             String ownerAddress = (String) jTblAllRealEstates.getValueAt(selectedRow, 0);
             String reAddress = (String) jTblAllRealEstates.getValueAt(selectedRow, 1);
 
-            int id = contracts.getIdByOwnerAndLocation(currentUser, ownerAddress, reAddress);
+            int id = contractsController.getIdByOwnerAndLocation(currentUser, ownerAddress, reAddress);
 
             FOwnershipHistory fOwnershipHistory = new FOwnershipHistory(currentUser, id);
             fOwnershipHistory.setVisible(true);
@@ -212,18 +213,18 @@ public class FAllRealEstates extends javax.swing.JFrame {
 
     private void jBttnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnNextActionPerformed
         // TODO add your handling code here:
-        if(jRadioBuyer.isSelected()){
-           FBuyer fBuyer = new FBuyer(currentUser);
-           fBuyer.setVisible(true);
-           
-           dispose();
+        if (jRadioBuyer.isSelected()) {
+            FBuyer fBuyer = new FBuyer(currentUser);
+            fBuyer.setVisible(true);
+
+            dispose();
         }
-        
-        if(jRadioSeller.isSelected()){
-           FSeller fSeller = new FSeller(currentUser);
-           fSeller.setVisible(true);
-           
-           dispose();
+
+        if (jRadioSeller.isSelected()) {
+            FSeller fSeller = new FSeller(currentUser);
+            fSeller.setVisible(true);
+
+            dispose();
         }
     }//GEN-LAST:event_jBttnNextActionPerformed
 
@@ -250,12 +251,9 @@ public class FAllRealEstates extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }
 
-    Controller controller = new Controller();
-    Contracts contracts = new Contracts();
-
     private void populateTableAllRealEstates() {
         try {
-            List<RealEstate> realEstates = controller.getAllRealEstates(currentUser);
+            List<RealEstate> realEstates = contractsController.getAllRealEstates(currentUser);
 
             List<RealEstate> filteredListAllRealEstates = filterListForAllRealEstates(realEstates);
 

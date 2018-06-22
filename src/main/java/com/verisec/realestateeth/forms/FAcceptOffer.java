@@ -5,10 +5,11 @@
  */
 package com.verisec.realestateeth.forms;
 
-import com.verisec.realestateeth.controller.Controller;
-import com.verisec.realestateeth.domain.Offer;
-import com.verisec.realestateeth.domain.RealEstate;
-import com.verisec.realestateeth.domain.User;
+import com.verisec.realestateeth.controller.ContractsController;
+import com.verisec.realestateeth.controller.DatabaseController;
+import com.verisec.realestateeth.domain.beans.Offer;
+import com.verisec.realestateeth.domain.beans.RealEstate;
+import com.verisec.realestateeth.domain.beans.User;
 import com.verisec.realestateeth.table.model.OfferTableModel;
 import com.verisec.realestateeth.table.model.RealEstateTableModel;
 import java.math.BigInteger;
@@ -33,7 +34,7 @@ public class FAcceptOffer extends javax.swing.JFrame {
     }
 
     User currentUser;
-    Controller controller = new Controller();
+    ContractsController contractsController = new ContractsController();
 
     FAcceptOffer(User seller) {
         initComponents();
@@ -157,7 +158,7 @@ public class FAcceptOffer extends javax.swing.JFrame {
 
             try {
                 contractAddress = offers.get(selectedRow).getContractAddress();
-                controller.acceptOffer(contractAddress, currentUser);
+                contractsController.acceptOffer(contractAddress, currentUser);
 
                 JOptionPane.showMessageDialog(null, "Offer accepted!");
                 offers.remove(selectedRow);
@@ -181,7 +182,7 @@ public class FAcceptOffer extends javax.swing.JFrame {
         if (selectedRow >= 0) {
             try {
                 contractAddress = offers.get(selectedRow).getContractAddress();
-                controller.declineOffer(contractAddress, currentUser);
+                contractsController.declineOffer(contractAddress, currentUser);
 
                 JOptionPane.showMessageDialog(null, "Offer declined!");
                 offers.remove(selectedRow);
@@ -214,7 +215,7 @@ public class FAcceptOffer extends javax.swing.JFrame {
 
     private void populateTableOffers(User seller) {
         try {
-            offers = controller.getOffersSeller(seller);
+            offers = contractsController.getOffersSeller(seller);
             TableModel tm = new OfferTableModel(offers);
             jTblOffers.setModel(tm);
         } catch (Exception ex) {

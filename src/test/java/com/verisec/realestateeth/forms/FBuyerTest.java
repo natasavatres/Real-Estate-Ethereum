@@ -5,8 +5,8 @@
  */
 package com.verisec.realestateeth.forms;
 
-import com.verisec.realestateeth.domain.RealEstate;
-import com.verisec.realestateeth.domain.User;
+import com.verisec.realestateeth.domain.beans.RealEstate;
+import com.verisec.realestateeth.domain.beans.User;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;

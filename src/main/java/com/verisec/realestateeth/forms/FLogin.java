@@ -5,8 +5,9 @@
  */
 package com.verisec.realestateeth.forms;
 
-import com.verisec.realestateeth.domain.User;
-import com.verisec.realestateeth.controller.Controller;
+import com.verisec.realestateeth.domain.beans.User;
+import com.verisec.realestateeth.controller.ContractsController;
+import com.verisec.realestateeth.controller.DatabaseController;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -94,6 +95,8 @@ public class FLogin extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    ContractsController contractsController = new ContractsController();
+    DatabaseController databaseController = new DatabaseController();
 
     private void jBttnLogInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnLogInActionPerformed
         try {
@@ -101,9 +104,8 @@ public class FLogin extends javax.swing.JFrame {
             String username = jTxtUsername.getText().trim();
             String password = jTxtPassword.getText().trim();
 
-            Controller controller = new Controller();
-            String encryptedPassword = controller.encrypt(password).toUpperCase();
-            User user = controller.findUser(username, encryptedPassword);
+            String encryptedPassword = databaseController.encrypt(password).toUpperCase();
+            User user = databaseController.findUser(username, encryptedPassword);
 
             if (user == null) {
                 JOptionPane.showMessageDialog(this, "There is no user with these credentials!");

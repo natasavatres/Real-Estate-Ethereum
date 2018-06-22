@@ -1,5 +1,5 @@
 package com.verisec.realestateeth.domain;
-import com.verisec.realestateeth.domain.BuyingSelling;
+import com.verisec.realestateeth.domain.generated.BuyingSelling;
 import java.math.BigInteger;
 import java.util.List;
 import org.web3j.tuples.generated.Tuple6;

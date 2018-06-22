@@ -5,9 +5,9 @@
  */
 package com.verisec.realestateeth.forms;
 
-import com.verisec.realestateeth.controller.Controller;
-import com.verisec.realestateeth.domain.RealEstate;
-import com.verisec.realestateeth.domain.User;
+import com.verisec.realestateeth.controller.ContractsController;
+import com.verisec.realestateeth.domain.beans.RealEstate;
+import com.verisec.realestateeth.domain.beans.User;
 import com.verisec.realestateeth.table.model.RealEstateTableModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +28,7 @@ public class FSeller extends javax.swing.JFrame {
     }
 
     User currentUser;
+    ContractsController contractsController = new ContractsController();
 
     public FSeller(User user) {
         initComponents();
@@ -179,11 +180,9 @@ public class FSeller extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }
 
-    Controller controller = new Controller();
-
     private void populateTableRealEstatesSeller(User seller) {
         try {
-            List<RealEstate> realEstates = controller.getAllRealEstates(seller);
+            List<RealEstate> realEstates = contractsController.getAllRealEstates(seller);
 
             List<RealEstate> filteredListRealEstates = filterListForSellerView(realEstates);
 

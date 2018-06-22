@@ -5,9 +5,9 @@
  */
 package com.verisec.realestateeth.forms;
 
-import com.verisec.realestateeth.controller.Controller;
-import com.verisec.realestateeth.domain.RealEstate;
-import com.verisec.realestateeth.domain.User;
+import com.verisec.realestateeth.controller.ContractsController;
+import com.verisec.realestateeth.domain.beans.RealEstate;
+import com.verisec.realestateeth.domain.beans.User;
 import com.verisec.realestateeth.table.model.RealEstateTableModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ public class FOwnershipHistory extends javax.swing.JFrame {
         initComponents();
     }
 
-    Controller controller = new Controller();
+    ContractsController contractsController = new ContractsController();
     User currentUser;
     int realEstateID;
 
@@ -122,7 +122,7 @@ public class FOwnershipHistory extends javax.swing.JFrame {
 
     private void populateTableOwnershipHistory(int id) {
         try {
-            List<RealEstate> realEstates = controller.getAllRealEstates(currentUser);
+            List<RealEstate> realEstates = contractsController.getAllRealEstates(currentUser);
             List<RealEstate> ownershipHistoryList = filterHistoryListForBuyerView(realEstates, id);
 
             RealEstateTableModel realEstateTableModel = new RealEstateTableModel(ownershipHistoryList);

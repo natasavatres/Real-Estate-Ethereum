@@ -5,9 +5,10 @@
  */
 package com.verisec.realestateeth.forms;
 
-import com.verisec.realestateeth.controller.Controller;
-import com.verisec.realestateeth.domain.Offer;
-import com.verisec.realestateeth.domain.User;
+import com.verisec.realestateeth.controller.ContractsController;
+import com.verisec.realestateeth.controller.DatabaseController;
+import com.verisec.realestateeth.domain.beans.Offer;
+import com.verisec.realestateeth.domain.beans.User;
 import com.verisec.realestateeth.table.model.BuyerOffersTableModel;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -27,7 +28,8 @@ public class FCheckBuyerOffers extends javax.swing.JFrame {
     }
 
     User currentUser;
-    Controller controller = new Controller();
+    ContractsController contractsController = new ContractsController();
+    DatabaseController databaseController = new DatabaseController();
     List<Offer> allOffers;
 
     public FCheckBuyerOffers(User user) {
@@ -145,7 +147,6 @@ public class FCheckBuyerOffers extends javax.swing.JFrame {
 
     private void jBttnPayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnPayActionPerformed
         // TODO add your handling code here
-        String contractAddress;
         int selectedRow = jTblBuyerOffers.getSelectedRow();
 
         BuyerOffersTableModel buyerOfferTableModel = (BuyerOffersTableModel) jTblBuyerOffers.getModel();
@@ -159,11 +160,11 @@ public class FCheckBuyerOffers extends javax.swing.JFrame {
                     return;
                 }
 
-                controller.payRealEstate(currentOffer, currentUser);
+                contractsController.payRealEstate(currentOffer, currentUser);
 
                 JOptionPane.showMessageDialog(null, "Successfully payed and changed ownership!");
                 allOffers.remove(selectedRow);
-                controller.deleteContract(currentOffer.getContractAddress());
+                databaseController.deleteContract(currentOffer.getContractAddress());
                 buyerOfferTableModel.refreshTable();
 
             } catch (Exception ex) {
@@ -185,7 +186,7 @@ public class FCheckBuyerOffers extends javax.swing.JFrame {
         if (selectedRow >= 0) {
             try {
                 contractAddress = allOffers.get(selectedRow).getContractAddress();
-                controller.deleteContract(contractAddress);
+                databaseController.deleteContract(contractAddress);
 
                 JOptionPane.showMessageDialog(this, "Offer deleted!");
                 allOffers.remove(selectedRow);
@@ -215,7 +216,7 @@ public class FCheckBuyerOffers extends javax.swing.JFrame {
 
     private void populateTableCheckBuyerOffers(User user) {
         try {
-            allOffers = controller.getAllBuyerOffers(user);
+            allOffers = contractsController.getAllBuyerOffers(user);
             TableModel tm = new BuyerOffersTableModel(allOffers);
             jTblBuyerOffers.setModel(tm);
         } catch (Exception ex) {

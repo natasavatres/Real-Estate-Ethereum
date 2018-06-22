@@ -5,9 +5,11 @@
  */
 package com.verisec.realestateeth.forms;
 
+import com.verisec.realestateeth.controller.ContractsController;
+import com.verisec.realestateeth.controller.DatabaseController;
 import com.verisec.realestateeth.db.DatabaseRepository;
 import com.verisec.realestateeth.domain.Contracts;
-import com.verisec.realestateeth.domain.User;
+import com.verisec.realestateeth.domain.beans.User;
 import static com.verisec.realestateeth.forms.FAdmin.logger;
 
 /**
@@ -20,6 +22,8 @@ public class FAdmin extends javax.swing.JFrame {
      * Creates new form FAdmin
      */
     User admin;
+    ContractsController contractsController = new ContractsController();
+    DatabaseController databaseController = new DatabaseController();
 
     public FAdmin(User user) {
         initComponents();
@@ -110,14 +114,12 @@ public class FAdmin extends javax.swing.JFrame {
         // TODO add your handling code here:
         FAddRealEstate fAddRealEstate = new FAddRealEstate(admin);
         fAddRealEstate.setVisible(true);
-
     }//GEN-LAST:event_jBttnAddRealEstateActionPerformed
 
     private void jBttnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnStartActionPerformed
         // TODO add your handling code here:
         try {
-            Contracts adminContracts = new Contracts();
-            adminContracts.createAdminContract();
+            contractsController.createAdminContract();
 
             jLblMessage.setText("Application successfully started!");
             jBttnAddRealEstate.setEnabled(true);
@@ -154,10 +156,9 @@ final static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(
         jBttnStart.setEnabled(false);
         jBttnAddRealEstate.setEnabled(false);
 
-        DatabaseRepository dbr = new DatabaseRepository();
         try {
-            String adminContractAddress = dbr.getContractAddress("000", "000");
-
+            String adminContractAddress = databaseController.getContractAddress("000", "000");
+            
             jLblMessage.setText("Application successfully started!");
             jBttnAddRealEstate.setEnabled(true);
 

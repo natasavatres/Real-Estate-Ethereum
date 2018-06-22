@@ -5,10 +5,10 @@
  */
 package com.verisec.realestateeth.forms;
 
-import com.verisec.realestateeth.controller.Controller;
+import com.verisec.realestateeth.controller.ContractsController;
 import com.verisec.realestateeth.domain.Contracts;
-import com.verisec.realestateeth.domain.RealEstate;
-import com.verisec.realestateeth.domain.User;
+import com.verisec.realestateeth.domain.beans.RealEstate;
+import com.verisec.realestateeth.domain.beans.User;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -28,8 +28,7 @@ public class FAddRealEstate extends javax.swing.JFrame {
 
     User currentUser;
     RealEstate currentRealEstate;
-    Controller controller = new Controller();
-    Contracts contracts = new Contracts();
+    ContractsController contractsController = new ContractsController();
 
     public FAddRealEstate(User admin) {
         initComponents();
@@ -186,10 +185,10 @@ public class FAddRealEstate extends javax.swing.JFrame {
         int price = Integer.parseInt(jTxtPrice.getText().trim());
 
         try {
-            int id = contracts.getIdForNewRealEstate(currentUser);
+            int id = contractsController.getIdForNewRealEstate(currentUser);
             RealEstate re = new RealEstate(id, ownerAddress, location, area, centerDistance, price);
 
-            contracts.addRealEstate(re);
+            contractsController.addRealEstate(re);
 
             JOptionPane.showMessageDialog(this, "Real estate successfully added!");
 

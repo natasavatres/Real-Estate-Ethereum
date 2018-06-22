@@ -5,10 +5,10 @@
  */
 package com.verisec.realestateeth.forms;
 
-import com.verisec.realestateeth.controller.Controller;
+import com.verisec.realestateeth.controller.ContractsController;
 import com.verisec.realestateeth.domain.Contracts;
-import com.verisec.realestateeth.domain.RealEstate;
-import com.verisec.realestateeth.domain.User;
+import com.verisec.realestateeth.domain.beans.RealEstate;
+import com.verisec.realestateeth.domain.beans.User;
 import com.verisec.realestateeth.table.model.RealEstateTableModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +31,7 @@ public class FBuyer extends javax.swing.JFrame {
     }
 
     User currentUser;
-    Contracts contracts = new Contracts();
-    Controller controller = new Controller();
+    ContractsController contractsController = new ContractsController();
 
     public FBuyer(User user) {
         initComponents();
@@ -225,7 +224,7 @@ public class FBuyer extends javax.swing.JFrame {
 
         int id = -1;
         try {
-            id = contracts.getIdByOwnerAndLocation(currentUser, ownerAddress, reAddress);
+            id = contractsController.getIdByOwnerAndLocation(currentUser, ownerAddress, reAddress);
         } catch (Exception ex) {
             Logger.getLogger(FBuyer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -260,7 +259,7 @@ public class FBuyer extends javax.swing.JFrame {
 
             int id = -1;
             try {
-                id = contracts.getIdByOwnerAndLocation(currentUser, ownerAddress, reAddress);
+                id = contractsController.getIdByOwnerAndLocation(currentUser, ownerAddress, reAddress);
             } catch (Exception ex) {
                 Logger.getLogger(FBuyer.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -326,7 +325,7 @@ public class FBuyer extends javax.swing.JFrame {
 
     private void populateTableRealEstates(User user) {
         try {
-            List<RealEstate> realEstates = controller.getAllRealEstates(user);
+            List<RealEstate> realEstates = contractsController.getAllRealEstates(user);
 
             List<RealEstate> filteredListRealEstates = filterListForBuyerView(realEstates);
 

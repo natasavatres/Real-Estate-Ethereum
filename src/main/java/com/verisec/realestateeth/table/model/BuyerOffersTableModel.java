@@ -5,7 +5,7 @@
  */
 package com.verisec.realestateeth.table.model;
 
-import com.verisec.realestateeth.domain.Offer;
+import com.verisec.realestateeth.domain.beans.Offer;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
