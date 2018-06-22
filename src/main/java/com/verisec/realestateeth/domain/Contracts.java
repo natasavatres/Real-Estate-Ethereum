@@ -164,7 +164,7 @@ public class Contracts {
                     contractTF = TransferingFunds.load(contractAddress, web3, credentials, GAS_PRICE, GAS_LIMIT);
 
                     offerState = contractTF.getState().send();
-                    System.out.println(offerState);
+                    logger.info(offerState);
 
                     if (offerSet.equals(offerState)) {
                         offeredPrice = (BigInteger) contractTF.getOffer().send();

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.table.TableModel;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -29,6 +30,8 @@ public class FSeller extends javax.swing.JFrame {
 
     User currentUser;
     ContractsController contractsController = new ContractsController();
+    
+    final static Logger LOGGER = Logger.getLogger(FOwnershipHistory.class);
 
     public FSeller(User user) {
         initComponents();
@@ -190,7 +193,7 @@ public class FSeller extends javax.swing.JFrame {
             jTblRealEstatesSeller.setModel(tm);
 
         } catch (Exception ex) {
-            System.out.println("Error in populating table with real estates from seller");
+            LOGGER.error("Error in populating table with real estates from seller", ex);
         }
         jTblRealEstatesSeller.disable();
     }

@@ -10,6 +10,7 @@ import com.verisec.realestateeth.controller.ContractsController;
 import com.verisec.realestateeth.controller.DatabaseController;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -97,6 +98,8 @@ public class FLogin extends javax.swing.JFrame {
 
     ContractsController contractsController = new ContractsController();
     DatabaseController databaseController = new DatabaseController();
+    
+    final static Logger LOGGER = Logger.getLogger(FLogin.class);
 
     private void jBttnLogInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnLogInActionPerformed
         try {
@@ -126,6 +129,7 @@ public class FLogin extends javax.swing.JFrame {
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "There is no user with these credentials!");
+            LOGGER.error("User not found in database", ex);
         }
     }//GEN-LAST:event_jBttnLogInActionPerformed
 

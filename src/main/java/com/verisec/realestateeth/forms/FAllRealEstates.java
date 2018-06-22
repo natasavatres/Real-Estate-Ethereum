@@ -6,7 +6,6 @@
 package com.verisec.realestateeth.forms;
 
 import com.verisec.realestateeth.controller.ContractsController;
-import com.verisec.realestateeth.domain.Contracts;
 import com.verisec.realestateeth.domain.beans.RealEstate;
 import com.verisec.realestateeth.domain.beans.User;
 import com.verisec.realestateeth.table.model.RealEstateTableModel;
@@ -14,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -30,6 +30,8 @@ public class FAllRealEstates extends javax.swing.JFrame {
 
     User currentUser;
     ContractsController contractsController = new ContractsController();
+    
+    final static Logger LOGGER = Logger.getLogger(FAllRealEstates.class);
 
     public FAllRealEstates(User user) {
         initComponents();
@@ -208,6 +210,7 @@ public class FAllRealEstates extends javax.swing.JFrame {
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Please select real estate!");
+            LOGGER.error("Real estate not selected", ex);
         }
     }//GEN-LAST:event_jBttnOwnershipActionPerformed
 
@@ -263,7 +266,7 @@ public class FAllRealEstates extends javax.swing.JFrame {
             realEstateTableModel.refreshTable();
 
         } catch (Exception ex) {
-            System.out.println("Error in populating table with real estates");
+            LOGGER.error("Error in populating table with real estates", ex);
         }
     }
 

@@ -10,6 +10,7 @@ import com.verisec.realestateeth.domain.beans.RealEstate;
 import com.verisec.realestateeth.domain.beans.User;
 import java.math.BigInteger;
 import javax.swing.JOptionPane;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -27,6 +28,8 @@ public class FSetOffer extends javax.swing.JFrame {
     User currentUser;
     RealEstate currentRealEstate;
     ContractsController contractsController = new ContractsController();
+    
+    final static Logger LOGGER = Logger.getLogger(FOwnershipHistory.class);
 
     public FSetOffer(User user, RealEstate realEstate) {
         initComponents();
@@ -194,6 +197,7 @@ public class FSetOffer extends javax.swing.JFrame {
                 dispose();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Error in setting offer!");
+                LOGGER.error("Error in setting offer", ex);
             }
         }
     }//GEN-LAST:event_jBttnSetOfferActionPerformed

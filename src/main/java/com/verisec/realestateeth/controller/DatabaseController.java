@@ -38,22 +38,6 @@ public class DatabaseController {
         dbr.deleteContract(contractAddress);
     }
 
-    public String encrypt(String password) throws Exception {
-
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        md.update(password.getBytes());
-        return bytesToHex(md.digest());
-
-    }
-
-    private static String bytesToHex(byte[] bytes) {
-        StringBuilder result = new StringBuilder();
-        for (byte b : bytes) {
-            result.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
-        }
-        return result.toString();
-    }
-
     public String getContractAddress(String addressBuyer, String addressSeller) throws Exception {
         return dbr.getContractAddress(addressBuyer, addressBuyer);
     }
@@ -68,5 +52,22 @@ public class DatabaseController {
 
     public List<ContractEntity> getAllBuyerContracts(User buyer) {
         return dbr.getAllBuyerContracts(buyer);
+    }
+    
+    
+    public String encrypt(String password) throws Exception {
+
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        md.update(password.getBytes());
+        return bytesToHex(md.digest());
+
+    }
+
+    private static String bytesToHex(byte[] bytes) {
+        StringBuilder result = new StringBuilder();
+        for (byte b : bytes) {
+            result.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+        }
+        return result.toString();
     }
 }

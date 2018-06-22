@@ -6,19 +6,13 @@
 package com.verisec.realestateeth.forms;
 
 import com.verisec.realestateeth.controller.ContractsController;
-import com.verisec.realestateeth.controller.DatabaseController;
 import com.verisec.realestateeth.domain.beans.Offer;
-import com.verisec.realestateeth.domain.beans.RealEstate;
 import com.verisec.realestateeth.domain.beans.User;
 import com.verisec.realestateeth.table.model.OfferTableModel;
-import com.verisec.realestateeth.table.model.RealEstateTableModel;
-import java.math.BigInteger;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -35,6 +29,8 @@ public class FAcceptOffer extends javax.swing.JFrame {
 
     User currentUser;
     ContractsController contractsController = new ContractsController();
+    
+    final static Logger LOGGER = Logger.getLogger(FAcceptOffer.class);
 
     FAcceptOffer(User seller) {
         initComponents();
@@ -166,7 +162,7 @@ public class FAcceptOffer extends javax.swing.JFrame {
                 offerTableModel.refreshTable();
 
             } catch (Exception ex) {
-                System.out.println("Error in accepting offer");
+                LOGGER.error("Error in accepting offer", ex);
             }
         } else {
             JOptionPane.showMessageDialog(null, "Please select offer!");
@@ -190,7 +186,7 @@ public class FAcceptOffer extends javax.swing.JFrame {
                 offerTableModel.refreshTable();
 
             } catch (Exception ex) {
-                System.out.println("Error in declining offer");
+                LOGGER.error("Error in declining offer", ex);
             }
         } else {
             JOptionPane.showMessageDialog(null, "Please select offer!");
@@ -219,7 +215,7 @@ public class FAcceptOffer extends javax.swing.JFrame {
             TableModel tm = new OfferTableModel(offers);
             jTblOffers.setModel(tm);
         } catch (Exception ex) {
-            System.out.println("Error in populating table with real estates");
+            LOGGER.error("Error in populating table with real estates", ex);
         }
     }
 

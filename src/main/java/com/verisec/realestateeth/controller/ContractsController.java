@@ -6,8 +6,6 @@
 package com.verisec.realestateeth.controller;
 
 import com.verisec.realestateeth.domain.beans.User;
-import com.verisec.realestateeth.db.DatabaseRepository;
-import com.verisec.realestateeth.domain.generated.BuyingSelling;
 import com.verisec.realestateeth.domain.Contracts;
 import com.verisec.realestateeth.domain.beans.Offer;
 import com.verisec.realestateeth.domain.beans.RealEstate;

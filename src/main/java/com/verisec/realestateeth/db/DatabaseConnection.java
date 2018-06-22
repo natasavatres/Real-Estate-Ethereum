@@ -7,6 +7,7 @@ package com.verisec.realestateeth.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import org.apache.log4j.Logger;
 /**
  *
  * @author FON
@@ -15,11 +16,13 @@ public class DatabaseConnection {
     private final Connection connection;
     private static DatabaseConnection instance;
     
+    final static Logger LOGGER = Logger.getLogger(DatabaseConnection.class);
+    
     private DatabaseConnection() throws Exception{
 
         DatabaseResources dbr = new DatabaseResources();
         connection = DriverManager.getConnection(dbr.getUrl(), dbr.getUsername(), dbr.getPassword());
-        System.out.println("Uspostavljena konekcija!");
+        LOGGER.info("Successfully connected!");
     }
 
     public Connection getConnection() {

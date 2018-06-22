@@ -6,16 +6,14 @@
 package com.verisec.realestateeth.forms;
 
 import com.verisec.realestateeth.controller.ContractsController;
-import com.verisec.realestateeth.domain.Contracts;
 import com.verisec.realestateeth.domain.beans.RealEstate;
 import com.verisec.realestateeth.domain.beans.User;
 import com.verisec.realestateeth.table.model.RealEstateTableModel;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -32,6 +30,8 @@ public class FBuyer extends javax.swing.JFrame {
 
     User currentUser;
     ContractsController contractsController = new ContractsController();
+    
+    final static Logger LOGGER = Logger.getLogger(FBuyer.class);
 
     public FBuyer(User user) {
         initComponents();
@@ -226,7 +226,7 @@ public class FBuyer extends javax.swing.JFrame {
         try {
             id = contractsController.getIdByOwnerAndLocation(currentUser, ownerAddress, reAddress);
         } catch (Exception ex) {
-            Logger.getLogger(FBuyer.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error("Error in getting ID by Owner and Location for history", ex);
         }
 
         if (selectedRow >= 0) {
@@ -261,7 +261,7 @@ public class FBuyer extends javax.swing.JFrame {
             try {
                 id = contractsController.getIdByOwnerAndLocation(currentUser, ownerAddress, reAddress);
             } catch (Exception ex) {
-                Logger.getLogger(FBuyer.class.getName()).log(Level.SEVERE, null, ex);
+                LOGGER.error("Error in getting ID by Owner and Location", ex);
             }
 
             RealEstate realEstate = new RealEstate(id, ownerAddress, reAddress, area, distance, price);
@@ -335,7 +335,7 @@ public class FBuyer extends javax.swing.JFrame {
             realEstateTableModel.refreshTable();
 
         } catch (Exception ex) {
-            System.out.println("Error in populating table with real estates");
+            LOGGER.error("Error in populating table with real estates", ex);
         }
     }
 

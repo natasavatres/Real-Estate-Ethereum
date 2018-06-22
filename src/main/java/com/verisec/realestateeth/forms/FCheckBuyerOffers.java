@@ -13,6 +13,7 @@ import com.verisec.realestateeth.table.model.BuyerOffersTableModel;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -31,6 +32,8 @@ public class FCheckBuyerOffers extends javax.swing.JFrame {
     ContractsController contractsController = new ContractsController();
     DatabaseController databaseController = new DatabaseController();
     List<Offer> allOffers;
+    
+    final static Logger LOGGER = Logger.getLogger(FCheckBuyerOffers.class);
 
     public FCheckBuyerOffers(User user) {
         initComponents();
@@ -168,8 +171,8 @@ public class FCheckBuyerOffers extends javax.swing.JFrame {
                 buyerOfferTableModel.refreshTable();
 
             } catch (Exception ex) {
-                System.out.println("Error in paying for real estate");
                 JOptionPane.showMessageDialog(this, "Error in paying for real estate!");
+                LOGGER.error("Error in paying for real estate", ex);
             }
         } else {
             JOptionPane.showMessageDialog(null, "Please select offer!");
@@ -194,7 +197,7 @@ public class FCheckBuyerOffers extends javax.swing.JFrame {
                 buyerOfferTableModel.refreshTable();
 
             } catch (Exception ex) {
-                System.out.println("Error in deleting offer");
+                LOGGER.error("Error in deleting offer", ex);
             }
         } else {
             JOptionPane.showMessageDialog(null, "Please select offer to delete!");
@@ -220,7 +223,7 @@ public class FCheckBuyerOffers extends javax.swing.JFrame {
             TableModel tm = new BuyerOffersTableModel(allOffers);
             jTblBuyerOffers.setModel(tm);
         } catch (Exception ex) {
-            System.out.println("Error in populating table with all offers for buyer");
+            LOGGER.error("Error in populating table with all offers for buyer", ex);
         }
 
     }

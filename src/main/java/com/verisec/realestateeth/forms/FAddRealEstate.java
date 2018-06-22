@@ -6,12 +6,10 @@
 package com.verisec.realestateeth.forms;
 
 import com.verisec.realestateeth.controller.ContractsController;
-import com.verisec.realestateeth.domain.Contracts;
 import com.verisec.realestateeth.domain.beans.RealEstate;
 import com.verisec.realestateeth.domain.beans.User;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -29,6 +27,8 @@ public class FAddRealEstate extends javax.swing.JFrame {
     User currentUser;
     RealEstate currentRealEstate;
     ContractsController contractsController = new ContractsController();
+    
+    final static Logger LOGGER = Logger.getLogger(FAddRealEstate.class);
 
     public FAddRealEstate(User admin) {
         initComponents();
@@ -199,8 +199,8 @@ public class FAddRealEstate extends javax.swing.JFrame {
             jTxtPrice.setText("");
 
         } catch (Exception ex) {
-            Logger.getLogger(FAddRealEstate.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "Error in adding new real estate!");
+            LOGGER.error("Error in adding new real estate" ,ex);
         }
 
     }//GEN-LAST:event_jBttnAddActionPerformed

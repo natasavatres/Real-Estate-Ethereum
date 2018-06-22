@@ -11,8 +11,7 @@ import com.verisec.realestateeth.domain.beans.User;
 import com.verisec.realestateeth.table.model.RealEstateTableModel;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -27,10 +26,12 @@ public class FOwnershipHistory extends javax.swing.JFrame {
         initComponents();
     }
 
+    final static Logger LOGGER = Logger.getLogger(FOwnershipHistory.class);
+    
     ContractsController contractsController = new ContractsController();
     User currentUser;
     int realEstateID;
-
+    
     FOwnershipHistory(User user, int id) {
         initComponents();
         currentUser = user;
@@ -129,7 +130,7 @@ public class FOwnershipHistory extends javax.swing.JFrame {
             jTblOwnershipHistory.setModel(realEstateTableModel);
 
         } catch (Exception ex) {
-            Logger.getLogger(FOwnershipHistory.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error(ex);
         }
 
     }

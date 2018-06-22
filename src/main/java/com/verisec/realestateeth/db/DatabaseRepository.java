@@ -18,6 +18,7 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -26,6 +27,8 @@ import java.util.List;
 public class DatabaseRepository {
 
     Connection connection;
+    
+    final static Logger LOGGER = Logger.getLogger(DatabaseRepository.class);
 
     private final String FIND_USER_QUERY = "SELECT * FROM user WHERE username = ? AND password = ?";
     private final String GET_USER_PRIVATE_KEY_QUERY = "SELECT private_key FROM user WHERE username=?";
@@ -99,7 +102,7 @@ public class DatabaseRepository {
             }
 
         } catch (Exception e) {
-            System.out.println("Error in generating keys");
+            LOGGER.error("Error in generating keys", e);
         }
     }
 
@@ -143,7 +146,7 @@ public class DatabaseRepository {
             }
 
         } catch (Exception e) {
-            System.out.println("Error in saving contract to database");
+            LOGGER.error("Error in saving contract to database", e);
         }
     }
 
@@ -173,7 +176,7 @@ public class DatabaseRepository {
             rs.close();
             ps.close();
         } catch (Exception ex) {
-            System.out.println("Error in getting offer buyer-seller");
+            LOGGER.error("Error in getting offer buyer-seller", ex);
         }
 
         return contractEntityList;
@@ -204,7 +207,7 @@ public class DatabaseRepository {
             rs.close();
             ps.close();
         } catch (Exception ex) {
-            System.out.println("Error in getting buyer's offers");
+            LOGGER.error("Error in getting buyer's offers", ex);
         }
 
         return contractEntityList;
@@ -218,7 +221,7 @@ public class DatabaseRepository {
             ps.executeUpdate();
 
         } catch (Exception e) {
-            System.out.println("Error in deleting contract from database");
+            LOGGER.error("Error in deleting contract from database", e);
         }
     }
 

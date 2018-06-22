@@ -7,10 +7,9 @@ package com.verisec.realestateeth.forms;
 
 import com.verisec.realestateeth.controller.ContractsController;
 import com.verisec.realestateeth.controller.DatabaseController;
-import com.verisec.realestateeth.db.DatabaseRepository;
-import com.verisec.realestateeth.domain.Contracts;
 import com.verisec.realestateeth.domain.beans.User;
-import static com.verisec.realestateeth.forms.FAdmin.logger;
+import org.apache.log4j.Logger;
+import static com.verisec.realestateeth.forms.FAdmin.LOGGER;
 
 /**
  *
@@ -24,6 +23,8 @@ public class FAdmin extends javax.swing.JFrame {
     User admin;
     ContractsController contractsController = new ContractsController();
     DatabaseController databaseController = new DatabaseController();
+
+    final static Logger LOGGER = Logger.getLogger(FAdmin.class);
 
     public FAdmin(User user) {
         initComponents();
@@ -125,8 +126,8 @@ public class FAdmin extends javax.swing.JFrame {
             jBttnAddRealEstate.setEnabled(true);
             jBttnStart.setEnabled(false);
         } catch (Exception e) {
-            logger.error("Error in Real Estate Contract deploy!", e);
             jLblMessage.setText("Error in Real Estate Contract deploy!");
+            LOGGER.error("Error in Real Estate Contract deploy!", e);
         }
 
     }//GEN-LAST:event_jBttnStartActionPerformed
@@ -150,7 +151,6 @@ public class FAdmin extends javax.swing.JFrame {
     private javax.swing.JButton jBttnStart;
     private javax.swing.JLabel jLblMessage;
     // End of variables declaration//GEN-END:variables
-final static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(FAdmin.class);
 
     private void firstFormView() {
         jBttnStart.setEnabled(false);
@@ -158,12 +158,14 @@ final static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(
 
         try {
             String adminContractAddress = databaseController.getContractAddress("000", "000");
-            
+
             jLblMessage.setText("Application successfully started!");
             jBttnAddRealEstate.setEnabled(true);
-
+            
+            LOGGER.info("Application successfully started");
         } catch (Exception ex) {
             jBttnStart.setEnabled(true);
+            LOGGER.info("Application already started");
         }
 
     }
