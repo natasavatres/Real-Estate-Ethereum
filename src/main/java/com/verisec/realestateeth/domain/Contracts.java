@@ -82,7 +82,13 @@ public class Contracts {
         dbController.addAdminContract(contractBS);
 
         contractBS.setRealEstate(BigInteger.valueOf(1), "0x3590aca93338b0721966a8d0c96ebf2c4c87c544", "Francuska 5", BigInteger.valueOf(40), BigInteger.valueOf(1), BigInteger.valueOf(80000)).send();
-        contractBS.setRealEstate(BigInteger.valueOf(2), "0x8cc5a1a0802db41db826c2fcb72423744338dcb0", "Marka Celebonovica 27", BigInteger.valueOf(45), BigInteger.valueOf(10), BigInteger.valueOf(45000)).send();
+        contractBS.setRealEstate(BigInteger.valueOf(2), "0x8cc5a1a0802db41db826c2fcb72423744338dcb0", "Marka Celebonovica 17", BigInteger.valueOf(45), BigInteger.valueOf(10), BigInteger.valueOf(45000)).send();
+        contractBS.setRealEstate(BigInteger.valueOf(3), "0x3590aca93338b0721966a8d0c96ebf2c4c87c544", "Mice Radakovica", BigInteger.valueOf(35), BigInteger.valueOf(12), BigInteger.valueOf(70000)).send();
+        contractBS.setRealEstate(BigInteger.valueOf(4), "0x8cc5a1a0802db41db826c2fcb72423744338dcb0", "Pedje Milosavljevica 32", BigInteger.valueOf(50), BigInteger.valueOf(14), BigInteger.valueOf(65000)).send();
+        contractBS.setRealEstate(BigInteger.valueOf(5), "0x3590aca93338b0721966a8d0c96ebf2c4c87c544", "Prvomajska 12", BigInteger.valueOf(45), BigInteger.valueOf(8), BigInteger.valueOf(60000)).send();
+        contractBS.setRealEstate(BigInteger.valueOf(6), "0x8cc5a1a0802db41db826c2fcb72423744338dcb0", "Ljubise Miodragovica 39", BigInteger.valueOf(50), BigInteger.valueOf(10), BigInteger.valueOf(60000)).send();
+        contractBS.setRealEstate(BigInteger.valueOf(7), "0x3590aca93338b0721966a8d0c96ebf2c4c87c544", "Gradiste 4", BigInteger.valueOf(38), BigInteger.valueOf(8), BigInteger.valueOf(50000)).send();
+        contractBS.setRealEstate(BigInteger.valueOf(8), "0x8cc5a1a0802db41db826c2fcb72423744338dcb0", "Svetog Nikole 7", BigInteger.valueOf(70), BigInteger.valueOf(2), BigInteger.valueOf(90000)).send();
     }
 
     protected List<RealEstate> createRealEstatesList(BuyingSellingWrapper buyingSellingWrapper) throws Exception {
@@ -188,12 +194,12 @@ public class Contracts {
 
         contractTF.accept().send();
         contractTF.setState("OfferAccepted").send();
-        
+
         String buyerAddress = dbController.getBuyerAddressByContractAddress(contractAddress);
-        
+
         for (Offer offer : offers) {
-            if(selectedOffer.getRealEstate().getRealEstateAddress().equals(offer.getRealEstate().getRealEstateAddress()) 
-                  && !selectedOffer.getBuyerAddress().equals(offer.getBuyerAddress())  ){
+            if (selectedOffer.getRealEstate().getRealEstateAddress().equals(offer.getRealEstate().getRealEstateAddress())
+                    && !selectedOffer.getBuyerAddress().equals(offer.getBuyerAddress())) {
                 declineOffer(offer.getContractAddress(), seller);
             }
         }
@@ -293,8 +299,7 @@ public class Contracts {
         String adminPK = dbController.getPrivateKey("admin");
         Credentials credentials = Credentials.create(adminPK);
 
-        DatabaseRepository dbr = new DatabaseRepository();
-        String adminContractAddress = dbr.getContractAddress("000", "000");
+        String adminContractAddress = dbController.getContractAddress("000", "000");
 
         contractBS = BuyingSelling.load(adminContractAddress, web3, credentials, GAS_PRICE, GAS_LIMIT);
 

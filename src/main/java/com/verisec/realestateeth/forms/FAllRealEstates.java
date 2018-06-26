@@ -229,13 +229,13 @@ public class FAllRealEstates extends javax.swing.JFrame {
             fBuyer.setVisible(true);
 
             dispose();
-        }
-
-        if (jRadioSeller.isSelected()) {
+        }else if (jRadioSeller.isSelected()) {
             FSeller fSeller = new FSeller(currentUser);
             fSeller.setVisible(true);
 
             dispose();
+        }else{
+            JOptionPane.showMessageDialog(this, "Please select radio button!");
         }
     }//GEN-LAST:event_jBttnNextActionPerformed
 
@@ -312,7 +312,7 @@ public class FAllRealEstates extends javax.swing.JFrame {
 
         TableColumnModel columnModel = jTblAllRealEstates.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(300);
-        columnModel.getColumn(1).setPreferredWidth(125);
+        columnModel.getColumn(1).setPreferredWidth(150);
         columnModel.getColumn(2).setPreferredWidth(50);
         columnModel.getColumn(3).setPreferredWidth(100);
         columnModel.getColumn(4).setPreferredWidth(55);

@@ -60,7 +60,6 @@ public class FBuyer extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jBttnBuy = new javax.swing.JButton();
         jBttnCheckOffers = new javax.swing.JButton();
@@ -92,9 +91,6 @@ public class FBuyer extends javax.swing.JFrame {
                 formWindowClosing(evt);
             }
         });
-
-        jPanel1.setMaximumSize(null);
-        jPanel1.setPreferredSize(new java.awt.Dimension(500, 500));
 
         jLabel2.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         jLabel2.setText("Available real estates");
@@ -149,43 +145,42 @@ public class FBuyer extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(54, 54, 54)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jBttnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(316, 316, 316)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(265, 265, 265)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(86, 86, 86)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(35, 35, 35)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createSequentialGroup()
                                     .addGap(224, 224, 224)
                                     .addComponent(jBttnCheckHistory, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                     .addComponent(jBttnBuy, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(94, 94, 94)
                                     .addComponent(jBttnCheckOffers, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGap(73, 73, 73)
                             .addComponent(jBttnLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(51, 51, 51)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 696, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 696, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(57, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(34, 34, 34)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(33, 33, 33)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBttnCheckOffers)
                     .addComponent(jBttnBuy)
                     .addComponent(jBttnLogOut))
@@ -193,18 +188,7 @@ public class FBuyer extends javax.swing.JFrame {
                 .addComponent(jBttnCheckHistory)
                 .addGap(18, 18, 18)
                 .addComponent(jBttnBack)
-                .addContainerGap(16, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 804, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         pack();
@@ -221,25 +205,22 @@ public class FBuyer extends javax.swing.JFrame {
 
     private void jBttnCheckHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnCheckHistoryActionPerformed
         // TODO add your handling code here:
-        int selectedRow = jTblRealEstatesBuyer.getSelectedRow();
-        String ownerAddress = (String) jTblRealEstatesBuyer.getValueAt(selectedRow, 0);
-        String reAddress = (String) jTblRealEstatesBuyer.getValueAt(selectedRow, 1);
-
-        int id = -1;
         try {
-            id = contractsController.getIdByOwnerAndLocation(currentUser, ownerAddress, reAddress);
-        } catch (Exception ex) {
-            LOGGER.error("Error in getting ID by Owner and Location for history", ex);
-        }
+            int selectedRow = jTblRealEstatesBuyer.getSelectedRow();
+            String ownerAddress = (String) jTblRealEstatesBuyer.getValueAt(selectedRow, 0);
+            String reAddress = (String) jTblRealEstatesBuyer.getValueAt(selectedRow, 1);
 
-        if (selectedRow >= 0) {
+            int id = contractsController.getIdByOwnerAndLocation(currentUser, ownerAddress, reAddress);
 
             FOwnershipHistory fOwnershipHistory = new FOwnershipHistory(currentUser, id);
             fOwnershipHistory.setVisible(true);
 
-        } else {
+        } catch (Exception ex) {
+            LOGGER.error("Real estate not selected", ex);
             JOptionPane.showMessageDialog(null, "Please select real estate!");
+
         }
+
     }//GEN-LAST:event_jBttnCheckHistoryActionPerformed
 
     private void jBttnCheckOffersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttnCheckOffersActionPerformed
@@ -317,7 +298,6 @@ public class FBuyer extends javax.swing.JFrame {
     private javax.swing.JButton jBttnCheckOffers;
     private javax.swing.JButton jBttnLogOut;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTblRealEstatesBuyer;
     // End of variables declaration//GEN-END:variables
@@ -371,7 +351,7 @@ public class FBuyer extends javax.swing.JFrame {
 
         TableColumnModel columnModel = jTblRealEstatesBuyer.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(300);
-        columnModel.getColumn(1).setPreferredWidth(125);
+        columnModel.getColumn(1).setPreferredWidth(150);
         columnModel.getColumn(2).setPreferredWidth(50);
         columnModel.getColumn(3).setPreferredWidth(100);
         columnModel.getColumn(4).setPreferredWidth(55);
@@ -392,7 +372,7 @@ public class FBuyer extends javax.swing.JFrame {
         statusLabel = new JLabel("  User:   " + currentUser);
         statusLabel.setHorizontalAlignment(SwingConstants.LEFT);
         statusLabel.setFont(new Font("Verdana", 0, 12));
-        
+
         statusPanel.add(statusLabel);
     }
 
