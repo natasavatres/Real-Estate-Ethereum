@@ -16,22 +16,17 @@ public class Offer {
     private RealEstate realEstate;
     private BigInteger offer;
     private String contractAddress;
+    private String buyerAddress;
     private String status;
 
-    public Offer(RealEstate realEstate, BigInteger offer, String contractAddress) {
+    public Offer(RealEstate realEstate, BigInteger offer, String contractAddress, String buyerAddress, String status) {
         this.realEstate = realEstate;
         this.offer = offer;
         this.contractAddress = contractAddress;
-        this.status = "";
-    }
-  
-    public Offer(RealEstate realEstate, BigInteger offer, String contractAddress, String status) {
-        this.realEstate = realEstate;
-        this.offer = offer;
-        this.contractAddress = contractAddress;
+        this.buyerAddress = buyerAddress;
         this.status = status;
     }
-
+   
     public BigInteger getOffer() {
         return offer;
     }
@@ -62,6 +57,14 @@ public class Offer {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getBuyerAddress() {
+        return buyerAddress;
+    }
+
+    public void setBuyerAddress(String buyerAddress) {
+        this.buyerAddress = buyerAddress;
     }
     
     

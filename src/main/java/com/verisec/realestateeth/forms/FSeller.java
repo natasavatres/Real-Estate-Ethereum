@@ -9,10 +9,17 @@ import com.verisec.realestateeth.controller.ContractsController;
 import com.verisec.realestateeth.domain.beans.RealEstate;
 import com.verisec.realestateeth.domain.beans.User;
 import com.verisec.realestateeth.table.model.RealEstateTableModel;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import org.apache.log4j.Logger;
@@ -39,6 +46,7 @@ public class FSeller extends javax.swing.JFrame {
         initComponents();
         centerForm();
         currentUser = user;
+        setStatusBar();
         populateTableRealEstatesSeller(user);
         setColumnSizes();
     }
@@ -232,5 +240,23 @@ public class FSeller extends javax.swing.JFrame {
         columnModel.getColumn(2).setPreferredWidth(50);
         columnModel.getColumn(3).setPreferredWidth(100);
         columnModel.getColumn(4).setPreferredWidth(55);
+    }
+
+    JPanel statusPanel;
+    JLabel statusLabel;
+
+    private void setStatusBar() {
+        setLayout(new BorderLayout());
+
+        statusPanel = new JPanel();
+        add(statusPanel, BorderLayout.SOUTH);
+
+        statusPanel.setPreferredSize(new Dimension(getWidth(), 30));
+        statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.X_AXIS));
+        statusLabel = new JLabel("  User:   " + currentUser);
+        statusLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        statusLabel.setFont(new Font("Verdana", 0, 12));
+        
+        statusPanel.add(statusLabel);
     }
 }

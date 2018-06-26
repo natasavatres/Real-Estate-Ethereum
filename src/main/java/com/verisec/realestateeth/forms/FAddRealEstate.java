@@ -27,7 +27,7 @@ public class FAddRealEstate extends javax.swing.JFrame {
     User currentUser;
     RealEstate currentRealEstate;
     ContractsController contractsController = new ContractsController();
-    
+
     final static Logger LOGGER = Logger.getLogger(FAddRealEstate.class);
 
     public FAddRealEstate(User admin) {
@@ -200,7 +200,7 @@ public class FAddRealEstate extends javax.swing.JFrame {
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error in adding new real estate!");
-            LOGGER.error("Error in adding new real estate" ,ex);
+            LOGGER.error("Error in adding new real estate", ex);
         }
 
     }//GEN-LAST:event_jBttnAddActionPerformed
@@ -213,10 +213,11 @@ public class FAddRealEstate extends javax.swing.JFrame {
     private void jTxtAreaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTxtAreaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTxtAreaActionPerformed
-    
+
     private void centerForm() {
         setLocationRelativeTo(null);
     }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBttnAdd;

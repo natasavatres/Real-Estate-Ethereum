@@ -53,8 +53,11 @@ public class DatabaseController {
     public List<ContractEntity> getAllBuyerContracts(User buyer) {
         return dbr.getAllBuyerContracts(buyer);
     }
-    
-    
+
+    public String getBuyerAddressByContractAddress(String contractAddress) throws Exception {
+        return dbr.getBuyerAddressByContractAddress(contractAddress);
+    }
+
     public String encrypt(String password) throws Exception {
 
         MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -70,4 +73,5 @@ public class DatabaseController {
         }
         return result.toString();
     }
+
 }

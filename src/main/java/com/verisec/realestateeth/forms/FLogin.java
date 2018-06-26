@@ -114,7 +114,7 @@ public class FLogin extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "There is no user with these credentials!");
                 dispose();
             } else {
-                JOptionPane.showMessageDialog(this, "Welcome " + user.getFirstName() + "!");
+                JOptionPane.showMessageDialog(this, "Welcome " + user + "!");
                 dispose();
 
                 if (user.getUsername().equals("admin")) {

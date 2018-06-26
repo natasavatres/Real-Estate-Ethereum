@@ -18,7 +18,7 @@ import javax.swing.table.AbstractTableModel;
 public class OfferTableModel extends AbstractTableModel {
 
     private final List<Offer> offers;
-    private String[] columnNames = new String[]{"Location", "Your price", "Offered price"};
+    private String[] columnNames = new String[]{ "Buyer address", "Location", "Your price", "Offered price"};
 
     public OfferTableModel(List<Offer> offers) {
         this.offers = offers;
@@ -32,7 +32,7 @@ public class OfferTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 3;
+        return 4;
     }
 
     @Override
@@ -40,10 +40,12 @@ public class OfferTableModel extends AbstractTableModel {
         Offer offer = offers.get(rowIndex);
         switch (columnIndex) {
             case 0:
-                return offer.getRealEstate().getRealEstateAddress();
+                return offer.getBuyerAddress();
             case 1:
-                return offer.getRealEstate().getPrice();
+                return offer.getRealEstate().getRealEstateAddress();
             case 2:
+                return offer.getRealEstate().getPrice();
+            case 3:
                 return offer.getOffer();
             default:
                 return "N/A";

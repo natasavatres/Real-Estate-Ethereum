@@ -8,8 +8,16 @@ package com.verisec.realestateeth.forms;
 import com.verisec.realestateeth.controller.ContractsController;
 import com.verisec.realestateeth.domain.beans.RealEstate;
 import com.verisec.realestateeth.domain.beans.User;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.math.BigInteger;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
 import org.apache.log4j.Logger;
 
 /**
@@ -28,13 +36,14 @@ public class FSetOffer extends javax.swing.JFrame {
     User currentUser;
     RealEstate currentRealEstate;
     ContractsController contractsController = new ContractsController();
-    
+
     final static Logger LOGGER = Logger.getLogger(FOwnershipHistory.class);
 
     public FSetOffer(User user, RealEstate realEstate) {
         initComponents();
         currentUser = user;
         currentRealEstate = realEstate;
+        setStatusBar();
         centerForm();
         setRealEstateInfo(realEstate);
     }
@@ -242,5 +251,23 @@ public class FSetOffer extends javax.swing.JFrame {
 
     private void centerForm() {
         setLocationRelativeTo(null);
+    }
+
+    JPanel statusPanel;
+    JLabel statusLabel;
+
+    private void setStatusBar() {
+        setLayout(new BorderLayout());
+
+        statusPanel = new JPanel();
+        add(statusPanel, BorderLayout.SOUTH);
+
+        statusPanel.setPreferredSize(new Dimension(getWidth(), 30));
+        statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.X_AXIS));
+        statusLabel = new JLabel("  User:   " + currentUser);
+        statusLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        statusLabel.setFont(new Font("Verdana", 0, 12));
+        
+        statusPanel.add(statusLabel);
     }
 }

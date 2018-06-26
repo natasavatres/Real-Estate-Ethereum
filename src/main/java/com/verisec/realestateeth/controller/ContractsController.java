@@ -36,8 +36,8 @@ public class ContractsController {
         return contract.getOffersSeller(seller);
     }
 
-    public void acceptOffer(String contractAddress, User seller) throws Exception {
-        contract.acceptOffer(contractAddress, seller);
+    public void acceptOffer(String contractAddress, User seller, List<Offer> offers, Offer selectedOffer) throws Exception {
+        contract.acceptOffer(contractAddress, seller, offers, selectedOffer);
     }
 
     public void declineOffer(String contractAddress, User seller) throws Exception {
@@ -67,4 +67,5 @@ public class ContractsController {
     public int getIdByOwnerAndLocation(User currentUser, String ownerAddress, String reAddress) throws Exception {
         return contract.getIdByOwnerAndLocation(currentUser, ownerAddress, reAddress);
     }
+
 }

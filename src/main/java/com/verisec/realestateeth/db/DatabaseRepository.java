@@ -27,7 +27,7 @@ import org.apache.log4j.Logger;
 public class DatabaseRepository {
 
     Connection connection;
-    
+
     final static Logger LOGGER = Logger.getLogger(DatabaseRepository.class);
 
     private final String FIND_USER_QUERY = "SELECT * FROM user WHERE username = ? AND password = ?";
@@ -37,6 +37,7 @@ public class DatabaseRepository {
     private final String GET_CONTRACTS_WITH_SELLER_QUERY = "SELECT * FROM contract WHERE address_seller = ?";
     private final String GET_ALL_BUYER_CONTRACTS_QUERY = "SELECT * FROM contract WHERE address_buyer = ?";
     private final String DELETE_CONTRACT_QUERY = "DELETE FROM contract WHERE address_contract = ?";
+    private final String GET_BUYER_ADDRESS_FROM_CONTRACT_ADDRESS_QUERY = "SELECT address_buyer FROM contract WHERE address_contract=?";
 
     public User findUser(String un, String pass) throws Exception {
         connection = DatabaseConnection.getInstance().getConnection();
@@ -223,6 +224,22 @@ public class DatabaseRepository {
         } catch (Exception e) {
             LOGGER.error("Error in deleting contract from database", e);
         }
+    }
+
+    public String getBuyerAddressByContractAddress(String contractAddress) throws Exception {
+        connection = DatabaseConnection.getInstance().getConnection();
+        PreparedStatement ps = connection.prepareStatement(GET_BUYER_ADDRESS_FROM_CONTRACT_ADDRESS_QUERY);
+        ps.setString(1, contractAddress);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            String buyerAddress = rs.getString("address_buyer");
+
+            rs.close();
+            ps.close();
+
+            return buyerAddress;
+        }
+        throw new Exception("There is no buyer in this contract!");
     }
 
 }

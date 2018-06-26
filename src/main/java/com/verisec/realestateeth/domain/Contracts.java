@@ -148,8 +148,6 @@ public class Contracts {
         List<Offer> offerList = new ArrayList<>();
 
         Web3j web3 = createWeb3j();
-        String adminContractAddress = dbController.getContractAddress("000", "000");
-
         String sellerPK = dbController.getPrivateKey(seller.getUsername());
         Credentials credentials = Credentials.create(sellerPK);
 
@@ -169,7 +167,8 @@ public class Contracts {
 
                     if (offerSet.equals(offerState)) {
                         offeredPrice = (BigInteger) contractTF.getOffer().send();
-                        offerList.add(new Offer(realEstatesFromSeller.get(i), offeredPrice, contractAddress));
+                        String buyerAddress = dbController.getBuyerAddressByContractAddress(contractAddress);
+                        offerList.add(new Offer(realEstatesFromSeller.get(i), offeredPrice, contractAddress, buyerAddress, "OfferSet"));
                     }
 
                 }
@@ -179,7 +178,7 @@ public class Contracts {
         return offerList;
     }
 
-    public void acceptOffer(String contractAddress, User seller) throws Exception {
+    public void acceptOffer(String contractAddress, User seller, List<Offer> offers, Offer selectedOffer) throws Exception {
         Web3j web3 = createWeb3j();
 
         String sellerPK = dbController.getPrivateKey(seller.getUsername());
@@ -189,6 +188,15 @@ public class Contracts {
 
         contractTF.accept().send();
         contractTF.setState("OfferAccepted").send();
+        
+        String buyerAddress = dbController.getBuyerAddressByContractAddress(contractAddress);
+        
+        for (Offer offer : offers) {
+            if(selectedOffer.getRealEstate().getRealEstateAddress().equals(offer.getRealEstate().getRealEstateAddress()) 
+                  && !selectedOffer.getBuyerAddress().equals(offer.getBuyerAddress())  ){
+                declineOffer(offer.getContractAddress(), seller);
+            }
+        }
     }
 
     public void declineOffer(String contractAddress, User seller) throws Exception {
@@ -234,7 +242,7 @@ public class Contracts {
             String offerState = contractTF.getState().send();
 
             RealEstate re = createRealEstateEntity(contractBS, buyerContract.getIdRealEstate());
-            offerList.add(new Offer(re, offeredPrice, buyerContract.getAddressContract(), offerState));
+            offerList.add(new Offer(re, offeredPrice, buyerContract.getAddressContract(), buyer.getAddress(), offerState));
         }
 
         return offerList;

@@ -78,4 +78,10 @@ public class User {
         this.privateKey = privateKey;
     }
 
+    @Override
+    public String toString() {
+        return firstName + " " + lastName; 
+    }
+
+    
 }
